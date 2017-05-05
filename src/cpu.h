@@ -1,3 +1,5 @@
+#pragma once
+
 #include <fstream>
 #include <cstdlib> //exit
 #include <cstring> //memset
@@ -44,33 +46,50 @@ public:
 
 	}
 
+	void reset();
+
+
 	//do this once per cycle
 	void tick(){
+		//check interrupts
+		
 		//fetch
-
-		//
+		unsigned int op = RAM[program_counter];
+		//decode
+		execute_opcode(op);
+		//execute
+		// program_counter += 1;
 	}
 
-	// unsigned char read_byte(unsigned char * addr){
-	// 	unsigned int index = reinterpret_cast<int>(addr);
-	// 	return RAM[index];
-	// }
-	// unsigned short int read_word(unsigned char * addr){
-	// 	return RAM[addr] & RAM[addr + 1];
-	// }
+	unsigned char read_byte(unsigned int addr){
+		return RAM[addr];
+	}
+	unsigned short int read_word(unsigned int addr){
+		return RAM[addr] & RAM[addr + 1];
+	}
 
-	// void write_byte(unsigned char * addr, unsigned char val){
-	// 	unsigned int index = reinterpret_cast<int>(addr);
-	// 	RAM[index] = val;
-	// }
-	// void write_word(unsigned char * addr, unsigned short int val);
+	void write_byte(unsigned int addr, unsigned char val){
+		RAM[addr] = val;
+	}
+	void write_word(unsigned int addr, unsigned short int val){
+		RAM[addr] = val;//TODO this is not done
+	}
 
 
 	
 	//execute opcode
-	void execute_opcode();
+	void execute_opcode(unsigned int op);
 
 private:
+
+	// Complete horizontal line timing = 108.7 µsec
+	// V-Blank = 1.09 msec
+	// Mode 2 = 19.31 µsec (~20 machine cycles)
+	// Mode 3 = Variable between 41.37 µsec - 70.69 µsec
+	// Mode 0 = H-Blank = 108.7 µsec - 19.31 - Mode 3
+
+	// Mode 0 minimum = 18.72 µsec (10 sprites on a line)
+	// Mode 0 maximum = 48.64 µsec (no sprites on a line)
 
 	//RAM bank
 
@@ -92,8 +111,8 @@ General Memory Map -- taken from pandocs
 	*/
 	unsigned char RAM[0xFFFF];
 
-	unsigned char stack_pointer;
-	unsigned char program_counter;
+	unsigned int stack_pointer;
+	unsigned int program_counter;
 
 	//registers - same method as Cinoop, credit given to cturt
 	struct {

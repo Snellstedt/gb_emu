@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstdlib> 
+#include "cpu.h"
+
+void GB_CPU::reset(){
+
+		af = 0x01B0;
+		bc = 0x0013;
+		de = 0x00D8;
+		hl = 0x014D;
+		stack_pointer = 0xFFFE;
+		program_counter = 0x100;
+
+		RAM[0xFF05] = 0x00; //TIMA
+		RAM[0xFF06] = 0x00; //TMA
+		RAM[0xFF07] = 0x00; //TAC
+		RAM[0xFF10] = 0x80; //NR10
+		RAM[0xFF11] = 0xBF; //NR11
+		RAM[0xFF12] = 0xF3; //NR12
+		RAM[0xFF14] = 0xBF; //NR14
+		RAM[0xFF16] = 0x3F; //NR16
+		RAM[0xFF17] = 0x00; //NR17
+		RAM[0xFF19] = 0xBF; //NR24
+		RAM[0xFF1A] = 0x7F; //NR30
+		RAM[0xFF1B] = 0xFF; //NR31
+		RAM[0xFF1C] = 0x9F; //NR32
+		RAM[0xFF1E] = 0xBF; //NR33
+		RAM[0xFF20] = 0xFF; //NR41
+		RAM[0xFF21] = 0x00; //NR42
+		RAM[0xFF22] = 0x00; //NR43
+		RAM[0xFF23] = 0xBF; //NR30
+		RAM[0xFF24] = 0x77; //NR50
+		RAM[0xFF25] = 0xF3; //NR51
+
+		RAM[0xFF26] = 0x80; //NR43// fix this
+
+		RAM[0xFF40] = 0x91; //LCDC
+		RAM[0xFF42] = 0x00; //SCY
+		RAM[0xFF43] = 0x00; //SCX
+		RAM[0xFF45] = 0x00; //LYC
+		RAM[0xFF47] = 0xFC; //BGP
+		RAM[0xFF48] = 0xFF; //OBP0
+		RAM[0xFF49] = 0xFF; //OBP1
+		RAM[0xFF4A] = 0x00; //WY
+		RAM[0xFF4B] = 0x00; //WX
+		RAM[0xFFFF] = 0x00; //IE
+		
+
+
+}
+
+void GB_CPU::execute_opcode(unsigned int op){
+	switch (op){
+		default:{
+
+			case 0x0:{ //NOP
+				break;
+			}
+
+			
+			std::cout << "Unrecognized opcode: " << op;
+			exit(1);
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+}

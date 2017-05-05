@@ -44,6 +44,7 @@ int main(int argc, char** args){
     ///end getopt //////////////////////////////////////////////////////////////////
 
 	GB_CPU gb_cpu(rom_name);
+	gb_cpu.reset();
 
     //Event handler
     // SDL_Event e;

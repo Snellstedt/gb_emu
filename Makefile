@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = ~/programs/gb_emu/src/main.cpp
+OBJS = ~/programs/gb_emu/src/main.cpp ~/programs/gb_emu/src/cpu.cpp 
 
 #OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = gb_emu
