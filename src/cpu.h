@@ -6,7 +6,9 @@
 #include <iostream>
 #include <ctime>
 
-
+using u8 = unsigned char;
+using u16 = unsigned short;
+using i32 = int;
 class GB_CPU{
 public:
 
@@ -59,7 +61,7 @@ public:
 		//check interrupts
 
 		//fetch
-		unsigned int op = RAM[program_counter];
+		u8 op = RAM[program_counter];
 		//decode
 		execute_opcode(op);
 		//execute
@@ -71,10 +73,121 @@ public:
 
 
 	
-	//execute opcode
-	void execute_opcode(unsigned int op);
 
 private:
+
+	//execute opcode
+	void execute_opcode(u8 op);
+
+	//opcode helper functions////////////////////////////////
+
+	//8 bit loads
+	void ld_nn_n(u16 nn, u8 n);
+	void ld_r1_r2(u8 r1, u8 r2);
+	void ld_a_n(u16 n);
+	void ld_a_c();
+	void ld_c_a();
+	void ldd_a_hl();
+	void ldd_hl_a();
+	void ldi_a_hl();
+	void ldi_hl_a();
+	void ldh_n_a();
+	void ldh_a_n();
+
+	//16 bit loads
+	void ld_n_nn(u8 n);
+	void ld_sp_hl();
+	void ld_hl_sp_n(int n);
+	void ld_nn_sp(int nn);
+	void push_nn(u16 nn);
+	void pop_nn(u16 nn);
+
+	//8 bit ALU
+	void add_a_n(u8 n);
+	void adc_a_n(u8 n);
+	void sub_a_n(u8 n);
+	void sbc_a_n(u8 n);
+	void and_n(u8 n);
+	void or_n(u8 n);
+	void xor_n(u8 n);
+	void cp_n(u8 n);
+	void inc_n(u8 n);
+	void dec_n(u8 n);
+
+	//16 bit arithmetic
+	void add_hl_n(u16 n);
+	void add_sp_n(u16 n);
+	void inc_nn(u16 nn);
+	void dec_nn(u16 nn);
+
+	//misc
+	void swap_n(u8 n);
+	void daa();
+	void cpl();
+	void ccf();
+	void scf();
+	void nop();
+	void halt();
+	void stop();
+	void di();
+	void ei();
+
+	//rotates and shifts
+	void rlca();
+	void rla();
+	void rrcs();
+	void rra();
+	void rlc_n(u8 n);
+	void rl_n(u8 n);
+	void rrc_n(u8 n);
+	void rr_n(u8 n);
+	void sla_n(u8 n);
+	void sra_n(u8 n);
+	void srl_n(u8 n);
+
+	//bit opcodes
+	void bit_b_r();
+	void set_b_r();
+	void res_b_r();
+
+	//jumps
+	void jp_nn(u16 nn);
+	void jp_cc_nn(bool cc, u16 nn);
+	void jp_hl();
+	void jr_n(u8 n);
+	void jr_cc_n(bool cc, u8 n);
+
+	//calls
+	void call_nn(u16 nn);
+	void call_cc_nn(bool cc, u16 nn);
+
+	//restarts
+	void rst_n(u8 n);
+
+	//returns
+	void ret();
+	void ret_cc(bool cc);
+	void reti();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	//gets 2 byte word in little endian
 	unsigned short read_word();

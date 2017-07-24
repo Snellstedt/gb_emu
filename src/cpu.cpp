@@ -61,113 +61,121 @@ unsigned short GB_CPU::read_word(){
 	return target;
 }
 
-void GB_CPU::execute_opcode(unsigned int op){
+void GB_CPU::execute_opcode(u8 op){
 	switch (op){
 
-			case 0x0:{ //NOP
-				++program_counter;
-				break;
-			}
+//use this commented code for functions, then  delete
+			// case 0x0:{ //NOP
+			// 	++program_counter;
+			// 	break;
+			// }
 
-			case 0xc3:{ //jmp too NNNN
-				program_counter = read_word();
-				break;
-			}
+			// case 0xc3:{ //jmp too NNNN
+			// 	program_counter = read_word();
+			// 	break;
+			// }
 
-			case 0xaf:{//XOR A with A, result in a
-				//this effectively zeros out a
-				a = 0;
-				//deal with flags
-				//if result is zero, set z_flag
-				z_flag = true;
-				c_flag = false;
-				n_flag = false;
-				h_flag = false;
+			// case 0xaf:{//XOR A with A, result in a
+			// 	//this effectively zeros out a
+			// 	a = 0;
+			// 	//deal with flags
+			// 	//if result is zero, set z_flag
+			// 	z_flag = true;
+			// 	c_flag = false;
+			// 	n_flag = false;
+			// 	h_flag = false;
 				
-				program_counter++;
-				break;
-			}
+			// 	program_counter++;
+			// 	break;
+			// }
 
-			case 0x21:{
-				//LD HL
-				hl = read_word();
-				program_counter += 3;
-				break;
-			}
+			// case 0x21:{
+			// 	//LD HL
+			// 	hl = read_word();
+			// 	program_counter += 3;
+			// 	break;
+			// }
 
-			case 0x0e:{
-				//LD C
-				c = RAM[program_counter + 1];
-				program_counter += 2;
-				break;
-			}
+			// case 0x0e:{
+			// 	//LD C
+			// 	c = RAM[program_counter + 1];
+			// 	program_counter += 2;
+			// 	break;
+			// }
 
-			case 0x06:{
-				//LD B
-				b = RAM[program_counter + 1];
-				program_counter += 2;
-				break;
-			}
+			// case 0x06:{
+			// 	//LD B
+			// 	b = RAM[program_counter + 1];
+			// 	program_counter += 2;
+			// 	break;
+			// }
 
-			case 0x32:{
-				// LD HL- A
-				// LD (HLD),A     - Put A into memory address HL. Decrement HL.
-				RAM[hl] = a;
-				--hl;
-				program_counter += 1;				
-				break;
-			}
+			// case 0x32:{
+			// 	// LD HL- A
+			// 	// LD (HLD),A     - Put A into memory address HL. Decrement HL.
+			// 	RAM[hl] = a;
+			// 	--hl;
+			// 	program_counter += 1;				
+			// 	break;
+			// }
 
-			case 0x05:{
-				// DEC B - Decrement register B
-				--b;
-				++program_counter;
-				if(b == 0) z_flag = true;
-				n_flag = true;
-				//TODO: settle H flag
-				break;
-			}
+			// case 0x05:{
+			// 	// DEC B - Decrement register B
+			// 	--b;
+			// 	++program_counter;
+			// 	if(b == 0) z_flag = true;
+			// 	n_flag = true;
+			// 	//TODO: settle H flag
+			// 	break;
+			// }
 
-			case 0x20:{
-				//JR NZ, r8
-				//jump of Z flag is reset
-				if(!z_flag){
-					int offset = static_cast<int>(RAM[program_counter + 1]);
-					program_counter += offset;
-					break;
-				}
-				program_counter += 2;
-				break;
-			}
+			// case 0x20:{
+			// 	//JR NZ, r8
+			// 	//jump of Z flag is reset
+			// 	if(!z_flag){
+			// 		int offset = static_cast<int>(RAM[program_counter + 1]);
+			// 		program_counter += offset;
+			// 		break;
+			// 	}
+			// 	program_counter += 2;
+			// 	break;
+			// }
 
-			case 0x0d:{
-				//DEC c
-				--c;
-				if(c == 0) z_flag = true;
-				n_flag = true;
-				//TODO: settle h flag
-				++program_counter;
-				break;
-			}
+			// case 0x0d:{
+			// 	//DEC c
+			// 	--c;
+			// 	if(c == 0) z_flag = true;
+			// 	n_flag = true;
+			// 	//TODO: settle h flag
+			// 	++program_counter;
+			// 	break;
+			// }
 
-			case 0x3e:{
-				//load immediate value to a
-				a = RAM[program_counter +1];
-				program_counter += 2;
-				break;
-			}
+			// case 0x3e:{
+			// 	//load immediate value to a
+			// 	a = RAM[program_counter +1];
+			// 	program_counter += 2;
+			// 	break;
+			// }
 
-			case 0xf3:{
-				//LD A,(C)       - Put value at address $FF00 + register C into A.
-				a = RAM[0xFF00 + c];
-				program_counter += 2;
-				break;
-			}
+			// case 0xf3:{
+			// 	//LD A,(C)       - Put value at address $FF00 + register C into A.
+			// 	a = RAM[0xFF00 + c];
+			// 	program_counter += 2;
+			// 	break;
+			// }
 
-			case 0x0f:{
-				
-				break;
-			}
+			// case 0x0f:{
+			// 	// RRC A          - Rotate A right. Old bit 0 to Carry flag.
+			// 	if (a%2) c_flag = true;
+			// 	else c_flag = false;
+			// 	a >>= 1;
+			// 	if(!a) z_flag = true;
+			// 	n_flag = false;
+			// 	h_flag = false;
+			// 	program_counter += 1;				
+			// 	break;
+			// }
 
 
 
@@ -182,3 +190,93 @@ void GB_CPU::execute_opcode(unsigned int op){
 
 	}//end switch
 }//end execute opcode
+
+	//opcode helper functions////////////////////////////////
+
+	//8 bit loads
+	void GB_CPU::ld_nn_n(u16 nn, u8 n){}
+	void GB_CPU::ld_r1_r2(u8 r1, u8 r2){}
+	void GB_CPU::ld_a_n(u16 n){}
+	void GB_CPU::ld_a_c(){}
+	void GB_CPU::ld_c_a(){}
+	void GB_CPU::ldd_a_hl(){}
+	void GB_CPU::ldd_hl_a(){}
+	void GB_CPU::ldi_a_hl(){}
+	void GB_CPU::ldi_hl_a(){}
+	void GB_CPU::ldh_n_a(){}
+	void GB_CPU::ldh_a_n(){}
+
+	//16 bit loads
+	void GB_CPU::ld_n_nn(u8 n){}
+	void GB_CPU::ld_sp_hl(){}
+	void GB_CPU::ld_hl_sp_n(int n){}
+	void GB_CPU::ld_nn_sp(int nn){}
+	void GB_CPU::push_nn(u16 nn){}
+	void GB_CPU::pop_nn(u16 nn){}
+
+	//8 bit ALU
+	void GB_CPU::add_a_n(u8 n){}
+	void GB_CPU::adc_a_n(u8 n){}
+	void GB_CPU::sub_a_n(u8 n){}
+	void GB_CPU::sbc_a_n(u8 n){}
+	void GB_CPU::and_n(u8 n){}
+	void GB_CPU::or_n(u8 n){}
+	void GB_CPU::xor_n(u8 n){}
+	void GB_CPU::cp_n(u8 n){}
+	void GB_CPU::inc_n(u8 n){}
+	void GB_CPU::dec_n(u8 n){}
+
+	//16 bit arithmetic
+	void GB_CPU::add_hl_n(u16 n){}
+	void GB_CPU::add_sp_n(u16 n){}
+	void GB_CPU::inc_nn(u16 nn){}
+	void GB_CPU::dec_nn(u16 nn){}
+
+	//misc
+	void GB_CPU::swap_n(u8 n){}
+	void GB_CPU::daa(){}
+	void GB_CPU::cpl(){}
+	void GB_CPU::ccf(){}
+	void GB_CPU::scf(){}
+	void GB_CPU::nop(){}
+	void GB_CPU::halt(){}
+	void GB_CPU::stop(){}
+	void GB_CPU::di(){}
+	void GB_CPU::ei(){}
+
+	//rotates and shifts
+	void GB_CPU::rlca(){}
+	void GB_CPU::rla(){}
+	void GB_CPU::rrcs(){}
+	void GB_CPU::rra(){}
+	void GB_CPU::rlc_n(u8 n){}
+	void GB_CPU::rl_n(u8 n){}
+	void GB_CPU::rrc_n(u8 n){}
+	void GB_CPU::rr_n(u8 n){}
+	void GB_CPU::sla_n(u8 n){}
+	void GB_CPU::sra_n(u8 n){}
+	void GB_CPU::srl_n(u8 n){}
+
+	//bit opcodes
+	void GB_CPU::bit_b_r(){}
+	void GB_CPU::set_b_r(){}
+	void GB_CPU::res_b_r(){}
+
+	//jumps
+	void GB_CPU::jp_nn(u16 nn){}
+	void GB_CPU::jp_cc_nn(bool cc, u16 nn){}
+	void GB_CPU::jp_hl(){}
+	void GB_CPU::jr_n(u8 n){}
+	void GB_CPU::jr_cc_n(bool cc, u8 n){}
+
+	//calls
+	void call_nn(u16 nn){}
+	void call_cc_nn(bool cc, u16 nn){}
+
+	//restarts
+	void rst_n(u8 n){}
+
+	//returns
+	void ret(){}
+	void ret_cc(bool cc){}
+	void reti(){}
