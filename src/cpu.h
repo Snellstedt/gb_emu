@@ -82,92 +82,93 @@ private:
 	//opcode helper functions////////////////////////////////
 
 	//8 bit loads
-	void ld_nn_n(u16 nn, u8 n);
-	void ld_r1_r2(u8 r1, u8 r2);
-	void ld_a_n(u16 n);
-	void ld_a_c();
-	void ld_c_a();
-	void ldd_a_hl();
-	void ldd_hl_a();
-	void ldi_a_hl();
-	void ldi_hl_a();
-	void ldh_n_a();
-	void ldh_a_n();
+	inline void ld_nn_n(u16 * nn, u8 n);
+	inline void ld_r1_r2(u8 * r1, u8 * r2);
+	inline void ld_a_n(u16 * n);
+	inline void ld_n_a(u16 * n);
+	inline void ld_a_c();
+	inline void ld_c_a();
+	inline void ldd_a_hl();
+	inline void ldd_hl_a();
+	inline void ldi_a_hl();
+	inline void ldi_hl_a();
+	inline void ldh_n_a(u16 n);
+	inline void ldh_a_n(u16 n);
 
 	//16 bit loads
-	void ld_n_nn(u8 n);
-	void ld_sp_hl();
-	void ld_hl_sp_n(int n);
-	void ld_nn_sp(int nn);
-	void push_nn(u16 nn);
-	void pop_nn(u16 nn);
+	inline void ld_n_nn(u8 n);
+	inline void ld_sp_hl();
+	inline void ld_hl_sp_n(int n);
+	inline void ld_nn_sp(int nn);
+	inline void push_nn(u16 nn);
+	inline void pop_nn(u16 nn);
 
 	//8 bit ALU
-	void add_a_n(u8 n);
-	void adc_a_n(u8 n);
-	void sub_a_n(u8 n);
-	void sbc_a_n(u8 n);
-	void and_n(u8 n);
-	void or_n(u8 n);
-	void xor_n(u8 n);
-	void cp_n(u8 n);
-	void inc_n(u8 n);
-	void dec_n(u8 n);
+	inline void add_a_n(u8 n);
+	inline void adc_a_n(u8 n);
+	inline void sub_a_n(u8 n);
+	inline void sbc_a_n(u8 n);
+	inline void and_n(u8 n);
+	inline void or_n(u8 n);
+	inline void xor_n(u8 n);
+	inline void cp_n(u8 n);
+	inline void inc_n(u8 n);
+	inline void dec_n(u8 n);
 
 	//16 bit arithmetic
-	void add_hl_n(u16 n);
-	void add_sp_n(u16 n);
-	void inc_nn(u16 nn);
-	void dec_nn(u16 nn);
+	inline void add_hl_n(u16 n);
+	inline void add_sp_n(u16 n);
+	inline void inc_nn(u16 nn);
+	inline void dec_nn(u16 nn);
 
 	//misc
-	void swap_n(u8 n);
-	void daa();
-	void cpl();
-	void ccf();
-	void scf();
-	void nop();
-	void halt();
-	void stop();
-	void di();
-	void ei();
+	inline void swap_n(u8 n);
+	inline void daa();
+	inline void cpl();
+	inline void ccf();
+	inline void scf();
+	inline void nop();
+	inline void halt();
+	inline void stop();
+	inline void di();
+	inline void ei();
 
 	//rotates and shifts
-	void rlca();
-	void rla();
-	void rrcs();
-	void rra();
-	void rlc_n(u8 n);
-	void rl_n(u8 n);
-	void rrc_n(u8 n);
-	void rr_n(u8 n);
-	void sla_n(u8 n);
-	void sra_n(u8 n);
-	void srl_n(u8 n);
+	inline void rlca();
+	inline void rla();
+	inline void rrcs();
+	inline void rra();
+	inline void rlc_n(u8 n);
+	inline void rl_n(u8 n);
+	inline void rrc_n(u8 n);
+	inline void rr_n(u8 n);
+	inline void sla_n(u8 n);
+	inline void sra_n(u8 n);
+	inline void srl_n(u8 n);
 
 	//bit opcodes
-	void bit_b_r();
-	void set_b_r();
-	void res_b_r();
+	inline void bit_b_r();
+	inline void set_b_r();
+	inline void res_b_r();
 
 	//jumps
-	void jp_nn(u16 nn);
-	void jp_cc_nn(bool cc, u16 nn);
-	void jp_hl();
-	void jr_n(u8 n);
-	void jr_cc_n(bool cc, u8 n);
+	inline void jp_nn(u16 nn);
+	inline void jp_cc_nn(bool cc, u16 nn);
+	inline void jp_hl();
+	inline void jr_n(u8 n);
+	inline void jr_cc_n(bool cc, u8 n);
 
 	//calls
-	void call_nn(u16 nn);
-	void call_cc_nn(bool cc, u16 nn);
+	inline void call_nn(u16 nn);
+	inline void call_cc_nn(bool cc, u16 nn);
 
 	//restarts
-	void rst_n(u8 n);
+	inline void rst_n(u8 n);
 
 	//returns
-	void ret();
-	void ret_cc(bool cc);
-	void reti();
+	inline void ret();
+	inline void ret_cc(bool cc);
+	inline void reti();
 
 
 

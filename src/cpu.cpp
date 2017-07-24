@@ -194,89 +194,120 @@ void GB_CPU::execute_opcode(u8 op){
 	//opcode helper functions////////////////////////////////
 
 	//8 bit loads
-	void GB_CPU::ld_nn_n(u16 nn, u8 n){}
-	void GB_CPU::ld_r1_r2(u8 r1, u8 r2){}
-	void GB_CPU::ld_a_n(u16 n){}
-	void GB_CPU::ld_a_c(){}
-	void GB_CPU::ld_c_a(){}
-	void GB_CPU::ldd_a_hl(){}
-	void GB_CPU::ldd_hl_a(){}
-	void GB_CPU::ldi_a_hl(){}
-	void GB_CPU::ldi_hl_a(){}
-	void GB_CPU::ldh_n_a(){}
-	void GB_CPU::ldh_a_n(){}
+inline void GB_CPU::ld_nn_n(u16 * nn, u8 n){
+	*nn = n;//n = 8 bit immediate value
+}
+
+inline void GB_CPU::ld_r1_r2(u8 * r1, u8 * r2){
+	*r1 = *r2;
+}
+
+inline void GB_CPU::ld_a_n(u16 * n){
+	a = *n;
+}
+
+inline void GB_CPU::ld_n_a(u16 * n){
+	*n = a;
+}
+
+inline void GB_CPU::ld_a_c(){
+	a = RAM[0xFF00 + c];
+}
+
+inline void GB_CPU::ld_c_a(){
+	RAM[0xFF00 + c] = a;
+}
+
+inline void GB_CPU::ldd_a_hl(){
+	a = RAM[hl];
+	--hl;
+}
+
+inline void GB_CPU::ldd_hl_a(){
+	RAM[hl] = a;
+	--hl;
+}
+
+inline void GB_CPU::ldi_a_hl(){
+	a = RAM[hl];
+	++hl;
+}
+
+inline void GB_CPU::ldi_hl_a(){
+	RAM[hl] = a;
+	++hl;
+}
+
+inline void GB_CPU::ldh_n_a(u16 n){
+	RAM[n] = a;
+}
+inline void GB_CPU::ldh_a_n(u16 n){
+	a = RAM[n];
+}
 
 	//16 bit loads
-	void GB_CPU::ld_n_nn(u8 n){}
-	void GB_CPU::ld_sp_hl(){}
-	void GB_CPU::ld_hl_sp_n(int n){}
-	void GB_CPU::ld_nn_sp(int nn){}
-	void GB_CPU::push_nn(u16 nn){}
-	void GB_CPU::pop_nn(u16 nn){}
-
+inline void GB_CPU::ld_n_nn(u8 n){}
+inline void GB_CPU::ld_sp_hl(){}
+inline void GB_CPU::ld_hl_sp_n(int n){}
+inline void GB_CPU::ld_nn_sp(int nn){}
+inline void GB_CPU::push_nn(u16 nn){}
+inline void GB_CPU::pop_nn(u16 nn){}
 	//8 bit ALU
-	void GB_CPU::add_a_n(u8 n){}
-	void GB_CPU::adc_a_n(u8 n){}
-	void GB_CPU::sub_a_n(u8 n){}
-	void GB_CPU::sbc_a_n(u8 n){}
-	void GB_CPU::and_n(u8 n){}
-	void GB_CPU::or_n(u8 n){}
-	void GB_CPU::xor_n(u8 n){}
-	void GB_CPU::cp_n(u8 n){}
-	void GB_CPU::inc_n(u8 n){}
-	void GB_CPU::dec_n(u8 n){}
-
+inline void GB_CPU::add_a_n(u8 n){}
+inline void GB_CPU::adc_a_n(u8 n){}
+inline void GB_CPU::sub_a_n(u8 n){}
+inline void GB_CPU::sbc_a_n(u8 n){}
+inline void GB_CPU::and_n(u8 n){}
+inline void GB_CPU::or_n(u8 n){}
+inline void GB_CPU::xor_n(u8 n){}
+inline void GB_CPU::cp_n(u8 n){}
+inline void GB_CPU::inc_n(u8 n){}
+inline void GB_CPU::dec_n(u8 n){}
 	//16 bit arithmetic
-	void GB_CPU::add_hl_n(u16 n){}
-	void GB_CPU::add_sp_n(u16 n){}
-	void GB_CPU::inc_nn(u16 nn){}
-	void GB_CPU::dec_nn(u16 nn){}
-
+inline void GB_CPU::add_hl_n(u16 n){}
+inline void GB_CPU::add_sp_n(u16 n){}
+inline void GB_CPU::inc_nn(u16 nn){}
+inline void GB_CPU::dec_nn(u16 nn){}
 	//misc
-	void GB_CPU::swap_n(u8 n){}
-	void GB_CPU::daa(){}
-	void GB_CPU::cpl(){}
-	void GB_CPU::ccf(){}
-	void GB_CPU::scf(){}
-	void GB_CPU::nop(){}
-	void GB_CPU::halt(){}
-	void GB_CPU::stop(){}
-	void GB_CPU::di(){}
-	void GB_CPU::ei(){}
-
+inline void GB_CPU::swap_n(u8 n){}
+inline void GB_CPU::daa(){}
+inline void GB_CPU::cpl(){}
+inline void GB_CPU::ccf(){}
+inline void GB_CPU::scf(){}
+inline void GB_CPU::nop(){}
+inline void GB_CPU::halt(){}
+inline void GB_CPU::stop(){}
+inline void GB_CPU::di(){}
+inline void GB_CPU::ei(){}
 	//rotates and shifts
-	void GB_CPU::rlca(){}
-	void GB_CPU::rla(){}
-	void GB_CPU::rrcs(){}
-	void GB_CPU::rra(){}
-	void GB_CPU::rlc_n(u8 n){}
-	void GB_CPU::rl_n(u8 n){}
-	void GB_CPU::rrc_n(u8 n){}
-	void GB_CPU::rr_n(u8 n){}
-	void GB_CPU::sla_n(u8 n){}
-	void GB_CPU::sra_n(u8 n){}
-	void GB_CPU::srl_n(u8 n){}
-
+inline void GB_CPU::rlca(){}
+inline void GB_CPU::rla(){}
+inline void GB_CPU::rrcs(){}
+inline void GB_CPU::rra(){}
+inline void GB_CPU::rlc_n(u8 n){}
+inline void GB_CPU::rl_n(u8 n){}
+inline void GB_CPU::rrc_n(u8 n){}
+inline void GB_CPU::rr_n(u8 n){}
+inline void GB_CPU::sla_n(u8 n){}
+inline void GB_CPU::sra_n(u8 n){}
+inline void GB_CPU::srl_n(u8 n){}
 	//bit opcodes
-	void GB_CPU::bit_b_r(){}
-	void GB_CPU::set_b_r(){}
-	void GB_CPU::res_b_r(){}
-
+inline void GB_CPU::bit_b_r(){}
+inline void GB_CPU::set_b_r(){}
+inline void GB_CPU::res_b_r(){}
 	//jumps
-	void GB_CPU::jp_nn(u16 nn){}
-	void GB_CPU::jp_cc_nn(bool cc, u16 nn){}
-	void GB_CPU::jp_hl(){}
-	void GB_CPU::jr_n(u8 n){}
-	void GB_CPU::jr_cc_n(bool cc, u8 n){}
+inline void GB_CPU::jp_nn(u16 nn){}
+inline void GB_CPU::jp_cc_nn(bool cc, u16 nn){}
+inline void GB_CPU::jp_hl(){}
+inline void GB_CPU::jr_n(u8 n){}
+inline void GB_CPU::jr_cc_n(bool cc, u8 n){}
 
 	//calls
-	void call_nn(u16 nn){}
-	void call_cc_nn(bool cc, u16 nn){}
-
+inline void call_nn(u16 nn){}
+inline void call_cc_nn(bool cc, u16 nn){}
 	//restarts
-	void rst_n(u8 n){}
-
+inline void rst_n(u8 n){}
 	//returns
-	void ret(){}
-	void ret_cc(bool cc){}
-	void reti(){}
+inline void ret(){}
+inline void ret_cc(bool cc){}
+inline void reti(){}
