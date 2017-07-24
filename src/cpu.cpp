@@ -128,6 +128,47 @@ void GB_CPU::execute_opcode(unsigned int op){
 				break;
 			}
 
+			case 0x20:{
+				//JR NZ, r8
+				//jump of Z flag is reset
+				if(!z_flag){
+					int offset = static_cast<int>(RAM[program_counter + 1]);
+					program_counter += offset;
+					break;
+				}
+				program_counter += 2;
+				break;
+			}
+
+			case 0x0d:{
+				//DEC c
+				--c;
+				if(c == 0) z_flag = true;
+				n_flag = true;
+				//TODO: settle h flag
+				++program_counter;
+				break;
+			}
+
+			case 0x3e:{
+				//load immediate value to a
+				a = RAM[program_counter +1];
+				program_counter += 2;
+				break;
+			}
+
+			case 0xf3:{
+				//LD A,(C)       - Put value at address $FF00 + register C into A.
+				a = RAM[0xFF00 + c];
+				program_counter += 2;
+				break;
+			}
+
+			case 0x0f:{
+				
+				break;
+			}
+
 
 
 			default:{
