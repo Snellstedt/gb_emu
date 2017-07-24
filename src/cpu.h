@@ -4,12 +4,13 @@
 #include <cstdlib> //exit
 #include <cstring> //memset
 #include <iostream>
+#include <ctime>
 
 
 class GB_CPU{
 public:
 
-	//constructor
+	//constructor 
 	GB_CPU(const std::string & ROM_file){
 
 
@@ -18,6 +19,8 @@ public:
 
 		//set registers, stack pointer and program counter to zero
 		a = f = c = b = e = d = l = h = program_counter = stack_pointer = 0;
+		z_flag = n_flag = h_flag = c_flag = false;
+
 		//open ROM
         std::ifstream file;
         file.open(ROM_file.c_str(), std::ios::in|std::ios::binary);
@@ -51,8 +54,10 @@ public:
 
 	//do this once per cycle
 	void tick(){
+		//delay to keep clock in sync
+
 		//check interrupts
-		
+
 		//fetch
 		unsigned int op = RAM[program_counter];
 		//decode
@@ -61,19 +66,8 @@ public:
 		// program_counter += 1;
 	}
 
-	unsigned char read_byte(unsigned int addr){
-		return RAM[addr];
-	}
-	unsigned short int read_word(unsigned int addr){
-		return RAM[addr] & RAM[addr + 1];
-	}
+	
 
-	void write_byte(unsigned int addr, unsigned char val){
-		RAM[addr] = val;
-	}
-	void write_word(unsigned int addr, unsigned short int val){
-		RAM[addr] = val;//TODO this is not done
-	}
 
 
 	
@@ -81,6 +75,10 @@ public:
 	void execute_opcode(unsigned int op);
 
 private:
+
+	//gets 2 byte word in little endian
+	unsigned short read_word();
+
 
 	// Complete horizontal line timing = 108.7 µsec
 	// V-Blank = 1.09 msec
@@ -110,6 +108,12 @@ General Memory Map -- taken from pandocs
   FFFF        Interrupt Enable Register
 	*/
 	unsigned char RAM[0xFFFF];
+
+	//flags
+	bool z_flag;//zero 
+	bool n_flag;//subtract
+	bool h_flag;//half carry
+	bool c_flag;//carry
 
 	unsigned int stack_pointer;
 	unsigned int program_counter;

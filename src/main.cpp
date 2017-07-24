@@ -48,8 +48,8 @@ int main(int argc, char** args){
 
     //Event handler
     // SDL_Event e;
-	//load rom
-	//initialize machine
+	// //load rom
+	// //initialize machine
 	// GB_Screen gb_screen;
 
 
@@ -62,9 +62,9 @@ int main(int argc, char** args){
 
 		gb_cpu.tick();
 
-		//Handle events on queue
+		// //Handle events on queue
 	    // while(SDL_PollEvent(&e)){
-	        //User requests quit
+	    //     // User requests quit
 	    //     if( e.type == SDL_QUIT ){
 	    //         quit = true;
 	    //         }

@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h> //sdl stuffs
+#include <SDL/SDL_ttf.h> //sdl stuffs
+
 #include <iostream> //std io stuffs cin cout
 #include <cstdlib> //exit
 
@@ -20,9 +22,20 @@ public:
 		//The image we will load and show on the screen
 		gHelloWorld = NULL;
 
+		gRegInfo = NULL;
+
+		textColor = {0,0,0};
+
+
+
 		//initialize SDL
 		if(SDL_Init(SDL_INIT_VIDEO) < 0){
 			std::cerr << "SDL could not be initialized! Error: " << SDL_GetError() << '\n';
+			exit(1);
+		}
+		//initialize font support
+		if(TTF_Init() < 0){
+			std::cerr << "SDL_TTF could not be initialized! Error: " << SDL_GetError() << '\n';
 			exit(1);
 		}
 
@@ -46,6 +59,8 @@ public:
 	    }
 
 	    	//debug stuff
+
+	    TTF_Font * Sans = TTF_OpenFont("media/FreeSans.ttf", 24);
 		//Fill the surface white
 		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
 		
@@ -82,6 +97,10 @@ private:
 
 	SDL_Surface* gHelloWorld;
 
+	//holds register info
+	SDL_Surface * gRegInfo;
+
+	SDL_Color textColor;
 
 
 

@@ -3,6 +3,7 @@
 #include "cpu.h"
 
 void GB_CPU::reset(){
+		
 
 		af = 0x01B0;
 		bc = 0x0013;
@@ -49,30 +50,94 @@ void GB_CPU::reset(){
 
 }
 
+
+unsigned short GB_CPU::read_word(){
+	//get high part
+	unsigned short target  = RAM[program_counter + 2];
+	target <<= 8; //shift to the high byte
+	//get low part
+	target += RAM[program_counter + 1];
+	//GO!
+	return target;
+}
+
 void GB_CPU::execute_opcode(unsigned int op){
 	switch (op){
-		default:{
 
 			case 0x0:{ //NOP
+				++program_counter;
 				break;
 			}
 
-			
-			std::cout << "Unrecognized opcode: " << op;
-			exit(1);
-		}
+			case 0xc3:{ //jmp too NNNN
+				program_counter = read_word();
+				break;
+			}
+
+			case 0xaf:{//XOR A with A, result in a
+				//this effectively zeros out a
+				a = 0;
+				//deal with flags
+				//if result is zero, set z_flag
+				z_flag = true;
+				c_flag = false;
+				n_flag = false;
+				h_flag = false;
+				
+				program_counter++;
+				break;
+			}
+
+			case 0x21:{
+				//LD HL
+				hl = read_word();
+				program_counter += 3;
+				break;
+			}
+
+			case 0x0e:{
+				//LD C
+				c = RAM[program_counter + 1];
+				program_counter += 2;
+				break;
+			}
+
+			case 0x06:{
+				//LD B
+				b = RAM[program_counter + 1];
+				program_counter += 2;
+				break;
+			}
+
+			case 0x32:{
+				// LD HL- A
+				// LD (HLD),A     - Put A into memory address HL. Decrement HL.
+				RAM[hl] = a;
+				--hl;
+				program_counter += 1;				
+				break;
+			}
+
+			case 0x05:{
+				// DEC B - Decrement register B
+				--b;
+				++program_counter;
+				if(b == 0) z_flag = true;
+				n_flag = true;
+				//TODO: settle H flag
+				break;
+			}
 
 
 
+			default:{
+				std::cout << "Unrecognized opcode: 0x" << std::hex << op 
+				<< "\n at address: 0x" << std::hex << program_counter << std::endl;
+				
+				exit(1);
+			}
 
 
 
-
-
-
-
-
-
-
-	}
-}
+	}//end switch
+}//end execute opcode
