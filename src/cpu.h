@@ -118,11 +118,11 @@ private:
 	//16 bit arithmetic
 	inline void add_hl_n(u16 n);
 	inline void add_sp_n(u16 n);
-	inline void inc_nn(u16 nn);
-	inline void dec_nn(u16 nn);
+	inline void inc_nn(u16 * nn);
+	inline void dec_nn(u16 * nn);
 
 	//misc
-	inline void swap_n(u8 n);
+	inline void swap_n(u8 * n);
 	inline void daa();
 	inline void cpl();
 	inline void ccf();
@@ -174,22 +174,6 @@ private:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	//gets 2 byte word in little endian
 	unsigned short read_word();
 
@@ -231,6 +215,7 @@ General Memory Map -- taken from pandocs
 
 	unsigned int stack_pointer;
 	unsigned int program_counter;
+	unsigned long clocks;
 
 	//registers - same method as Cinoop, credit given to cturt
 	struct {
