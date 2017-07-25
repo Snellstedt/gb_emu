@@ -71,8 +71,8 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x01:{//ld bc, d16
-			ld_nn_n(&bc, RAM[program_counter + 1]);
-			clocks += 8;
+			ld_n_nn(&bc);
+			clocks += 12;
 			program_counter +=2;
 		} break;
 
@@ -84,8 +84,13 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x05:{//dec b
 		} break;
+
 		case 0x06:{//ld b, d8
+			ld_nn_n(&b);
+			clocks += 8;
+			program_counter +=2;
 		} break;
+
 		case 0x07:{//rlca
 		} break;
 		case 0x08:{
@@ -100,8 +105,13 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x0d:{
 		} break;
-		case 0x0e:{
+
+		case 0x0e:{ //ld c, d8
+			ld_nn_n(&c);
+			clocks += 8;
+			program_counter +=2;
 		} break;
+
 		case 0x0f:{
 		} break;
 		case 0x10:{
@@ -116,8 +126,13 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x15:{
 		} break;
-		case 0x16:{
+
+		case 0x16:{//ld d, d8
+			ld_nn_n(&d);
+			clocks += 8;
+			program_counter +=2;
 		} break;
+	
 		case 0x17:{
 		} break;
 		case 0x18:{
@@ -132,8 +147,13 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x1d:{
 		} break;
-		case 0x1e:{
+
+		case 0x1e:{//ld e,d8
+			ld_nn_n(&e);
+			clocks += 8;
+			program_counter +=2;
 		} break;
+
 		case 0x1f:{
 		} break;
 		case 0x20:{
@@ -148,14 +168,37 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x25:{
 		} break;
-		case 0x26:{
+
+		case 0x26:{//ld h, d8
+			ld_nn_n(&h);
+			clocks += 8;
+			program_counter +=2;
 		} break;
+
 		case 0x27:{
 		} break;
 		case 0x28:{
 		} break;
 		case 0x29:{
 		} break;
+		case 0x2a:{
+		} break;
+		case 0x2b:{
+		} break;
+		case 0x2c:{
+		} break;
+		case 0x2d:{
+		} break;
+
+		case 0x2e:{//ld l, d8
+			ld_nn_n(&l);
+			clocks += 8;
+			program_counter +=2;
+		} break;
+		
+		case 0x2f:{
+		} break;
+		
 		case 0x30:{
 		} break;
 		case 0x3a:{
@@ -170,20 +213,49 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0x3f:{
 		} break;
-		case 0x40:{
+
+		case 0x40:{//ld b,b
+			ld_r1_r2(&b, &b);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x41:{
+
+		case 0x41:{//ld b,c
+			ld_r1_r2(&b, &c);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x42:{
+
+		case 0x42:{//ld b,d
+			ld_r1_r2(&b, &d);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x43:{
+
+		case 0x43:{//ld b,e
+			ld_r1_r2(&b, &e);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x44:{
+
+		case 0x44:{//ld b,h
+			ld_r1_r2(&b, &h);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x45:{
+
+		case 0x45:{//ld b,l
+			ld_r1_r2(&b, &l);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x46:{
+
+		case 0x46:{//ld b, (hl)
+			ld_r1_r2(&b, &b);
+			program_counter += 1;
+			clocks += 4;
 		} break;
+		
 		case 0x47:{
 		} break;
 		case 0x48:{
@@ -668,6 +740,7 @@ void GB_CPU::execute_opcode(u8 op){
 						} break;
 						case 0x46:{
 						} break;
+
 						case 0x47:{
 						} break;
 						case 0x48:{
@@ -1168,8 +1241,8 @@ void GB_CPU::execute_opcode(u8 op){
 	//opcode helper functions////////////////////////////////
 
 	//8 bit loads
-inline void GB_CPU::ld_nn_n(u16 * nn, u8 n){
-	*nn = n;//n = 8 bit immediate value
+inline void GB_CPU::ld_nn_n(u8 * nn){
+	*nn = RAM[program_counter + 1];
 }
 
 inline void GB_CPU::ld_r1_r2(u8 * r1, u8 * r2){

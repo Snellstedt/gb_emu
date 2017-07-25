@@ -82,7 +82,7 @@ private:
 	//opcode helper functions////////////////////////////////
 
 	//8 bit loads
-	inline void ld_nn_n(u16 * nn, u8 n);
+	inline void ld_nn_n(u8 * nn);
 	inline void ld_r1_r2(u8 * r1, u8 * r2);
 	inline void ld_a_n(u16 * n);
 	inline void ld_n_a(u16 * n);
