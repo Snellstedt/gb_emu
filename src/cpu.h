@@ -96,7 +96,7 @@ private:
 	inline void ldh_a_n(u16 n);
 
 	//16 bit loads
-	inline void ld_n_nn(u8 n);
+	inline void ld_n_nn(u16 * n);
 	inline void ld_sp_hl();
 	inline void ld_hl_sp_n(int n);
 	inline void ld_nn_sp(int nn);
@@ -112,8 +112,8 @@ private:
 	inline void or_n(u8 n);
 	inline void xor_n(u8 n);
 	inline void cp_n(u8 n);
-	inline void inc_n(u8 n);
-	inline void dec_n(u8 n);
+	inline void inc_n(u8 * n);
+	inline void dec_n(u8 * n);
 
 	//16 bit arithmetic
 	inline void add_hl_n(u16 n);

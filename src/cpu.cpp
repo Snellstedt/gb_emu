@@ -246,26 +246,116 @@ inline void GB_CPU::ldh_a_n(u16 n){
 }
 
 	//16 bit loads
-inline void GB_CPU::ld_n_nn(u8 n){}
-inline void GB_CPU::ld_sp_hl(){}
-inline void GB_CPU::ld_hl_sp_n(int n){}
-inline void GB_CPU::ld_nn_sp(int nn){}
-inline void GB_CPU::push_nn(u16 nn){}
-inline void GB_CPU::pop_nn(u16 nn){}
+inline void GB_CPU::ld_n_nn(u16 * n){
+	program_counter +=2;
+	*n = read_word();
+}
+
+inline void GB_CPU::ld_sp_hl(){
+	stack_pointer = hl;
+}
+
+inline void GB_CPU::ld_hl_sp_n(int n){
+	hl = stack_pointer + static_cast<u16>(RAM[program_counter +1]);
+}
+
+inline void GB_CPU::ld_nn_sp(int nn){
+	RAM[read_word()] = stack_pointer; 
+}
+inline void GB_CPU::push_nn(u16 nn){
+	RAM[stack_pointer] = nn;
+	----stack_pointer; 
+}
+inline void GB_CPU::pop_nn(u16 nn){
+	nn = RAM[stack_pointer];
+	++++stack_pointer;
+}
 	//8 bit ALU
-inline void GB_CPU::add_a_n(u8 n){}
-inline void GB_CPU::adc_a_n(u8 n){}
-inline void GB_CPU::sub_a_n(u8 n){}
-inline void GB_CPU::sbc_a_n(u8 n){}
-inline void GB_CPU::and_n(u8 n){}
-inline void GB_CPU::or_n(u8 n){}
-inline void GB_CPU::xor_n(u8 n){}
-inline void GB_CPU::cp_n(u8 n){}
-inline void GB_CPU::inc_n(u8 n){}
-inline void GB_CPU::dec_n(u8 n){}
+inline void GB_CPU::add_a_n(u8 n){
+	//check for carry in bit 3
+
+	//check for carry in bit 7
+
+	a += n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+}
+
+inline void GB_CPU::adc_a_n(u8 n){
+
+}
+inline void GB_CPU::sub_a_n(u8 n){
+	a = ~a;
+	a += n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+}
+inline void GB_CPU::sbc_a_n(u8 n){
+	a = ~a;
+	a += n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+}
+inline void GB_CPU::and_n(u8 n){
+	a &= n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+	h_flag = true;
+	n_flag = false;
+	c_flag = false;
+
+}
+inline void GB_CPU::or_n(u8 n){
+	a |= n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+	h_flag = false;
+	n_flag = false;
+	c_flag = false;
+
+}
+inline void GB_CPU::xor_n(u8 n){
+	a ^= n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+	h_flag = false;
+	n_flag = false;
+	c_flag = false;
+
+}
+inline void GB_CPU::cp_n(u8 n){
+	if(a == n) z_flag = true;
+	n_flag = set;
+	// figure out h_flag
+	if(a < n) c_flag = true;
+}
+inline void GB_CPU::inc_n(u8 * n){
+	++(*n);
+	if(*n == 0) z_flag = true;
+	n_flag = false;
+	//figure out h flag
+	//c flag not affected
+}
+inline void GB_CPU::dec_n(u8 * n){
+	--(*n);
+	if(*n == 0) z_flag = true;
+	n_flag = true;
+	//figure out h flag
+	//c flag not affected
+}
 	//16 bit arithmetic
-inline void GB_CPU::add_hl_n(u16 n){}
-inline void GB_CPU::add_sp_n(u16 n){}
+inline void GB_CPU::add_hl_n(u16  n){
+	hl += n;
+	//z flag not affected
+	n_flag = false;
+	//figure out h and c flags
+}
+inline void GB_CPU::add_sp_n(u16 n){
+	stack_pointer += RAM[program_counter + 1];
+	z_flag = false;
+	n_flag = false;
+	//figure out h and c flags
+}
 inline void GB_CPU::inc_nn(u16 nn){}
 inline void GB_CPU::dec_nn(u16 nn){}
 	//misc
