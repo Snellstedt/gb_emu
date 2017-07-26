@@ -138,18 +138,18 @@ private:
 	inline void rla();
 	inline void rrca();
 	inline void rra();
-	inline void rlc_n(u8 n);
-	inline void rl_n(u8 n);
-	inline void rrc_n(u8 n);
-	inline void rr_n(u8 n);
-	inline void sla_n(u8 n);
-	inline void sra_n(u8 n);
-	inline void srl_n(u8 n);
+	inline void rlc_n(u8 * n);
+	inline void rl_n(u8 * n);
+	inline void rrc_n(u8 * n);
+	inline void rr_n(u8 * n);
+	inline void sla_n(u8 * n);
+	inline void sra_n(u8 * n);
+	inline void srl_n(u8 * n);
 
 	//bit opcodes
-	inline void bit_b_r();
-	inline void set_b_r();
-	inline void res_b_r();
+	inline void bit_b_r(u8 b, u8 * n);
+	inline void set_b_r(u8 b, u8 * n);
+	inline void res_b_r(u8 b, u8 * n);
 
 	//jumps
 	inline void jp_nn(u16 nn);

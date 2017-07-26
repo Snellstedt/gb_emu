@@ -319,7 +319,7 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 		
-		case 0x2f:{
+		case 0x2f:{//rra
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -2309,17 +2309,25 @@ inline void GB_CPU::pop_nn(u16 nn){
 	//8 bit ALU
 inline void GB_CPU::add_a_n(u8 n){
 	//check for carry in bit 3
-
+	if(a & 0x4 && n & 0x4) h_flag = true; 
 	//check for carry in bit 7
-
+	if(a & 0xf && n & 0xf) c_flag = true; 
 	a += n;
 	if (a == 0) z_flag = true;
 	else n_flag = false;
 }
 
+//TODO: bug warning
 inline void GB_CPU::adc_a_n(u8 n){
-
+	//check for carry in bit 3
+	if(a & 0x4 && n & 0x4) h_flag = true; 
+	//check for carry in bit 7
+	if(a & 0xf && n & 0xf) c_flag = true; 
+	n_flag = false;
+	a += n;
+	if(c_flag) ++a;
 }
+
 inline void GB_CPU::sub_a_n(u8 n){
 	a = ~a;
 	a += n;
@@ -2360,33 +2368,42 @@ inline void GB_CPU::xor_n(u8 n){
 
 }
 inline void GB_CPU::cp_n(u8 n){
+	if(a & 0x4 && n & 0x4) h_flag = true; 
+
 	if(a == n) z_flag = true;
 	n_flag = true;
-	// figure out h_flag
-	if(a < n) c_flag = true;
+	if(a < n) c_flag = true;// TODO: Check this
 }
 inline void GB_CPU::inc_n(u8 * n){
+	if(*n & 0x4) h_flag = true;
 	++(*n);
 	if(*n == 0) z_flag = true;
 	n_flag = false;
-	//figure out h flag
 	//c flag not affected
 }
 inline void GB_CPU::dec_n(u8 * n){
+	if(*n & 0x4) h_flag = true;
 	--(*n);
 	if(*n == 0) z_flag = true;
 	n_flag = true;
-	//figure out h flag
 	//c flag not affected
 }
 	//16 bit arithmetic
 inline void GB_CPU::add_hl_n(u16  n){
+	//check for carry in bit 3
+	if(hl & 0x4 && n & 0x4) h_flag = true; 
+	//check for carry in bit 7
+	if(hl & 0xf && n & 0xf) c_flag = true; 
 	hl += n;
 	//z flag not affected
 	n_flag = false;
 	//figure out h and c flags
 }
 inline void GB_CPU::add_sp_n(u16 n){
+	//check for carry in bit 3
+	if(stack_pointer & 0x4 && n & 0x4) h_flag = true; 
+	//check for carry in bit 7
+	if(stack_pointer & 0xf && n & 0xf) c_flag = true; 
 	stack_pointer += RAM[program_counter + 1];
 	z_flag = false;
 	n_flag = false;
@@ -2450,52 +2467,83 @@ inline void GB_CPU::ei(){
 
 	//TODO: rotates are probably buggy af, double check these
 inline void GB_CPU::rlca(){
-	if(a > 128) c_flag = true;
-	else c_flag = false;
+	if(a & 0xf) c_flag = true;
 	a << 1;
+	if(c_flag) ++a;
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
 }
 inline void GB_CPU::rla(){
-	//TODO: see how is different from previous instruction
-	if(a > 128) c_flag = true;
-	else c_flag = false;
+	if(c_flag) ++a;
+	if(a & 0xf) c_flag = true;
 	a << 1;
-	if(a == 0) z_flag = true;
+	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
 }
 inline void GB_CPU::rrca(){
-	if(a%2) c_flag = true;
-	else c_flag = false;
+	if(a & 0x1) c_flag = true;
 	a >> 1;
+	if(c_flag) ++a;
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
 
 }
 inline void GB_CPU::rra(){
-	//TODO: see how this is different from previous
-	if(a%2) c_flag = true;
-	else c_flag = false;
+	if(c_flag) ++a;
+	if(a & 0x1) c_flag = true;
 	a >> 1;
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
 
 }
-inline void GB_CPU::rlc_n(u8 n){}
-inline void GB_CPU::rl_n(u8 n){}
-inline void GB_CPU::rrc_n(u8 n){}
-inline void GB_CPU::rr_n(u8 n){}
-inline void GB_CPU::sla_n(u8 n){}
-inline void GB_CPU::sra_n(u8 n){}
-inline void GB_CPU::srl_n(u8 n){}
+inline void GB_CPU::rlc_n(u8 * n){
+	if(*n & 0xf) c_flag = true;
+	*n << 1;
+	if(c_flag) ++(*n);
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	
+}
+inline void GB_CPU::rl_n(u8 * n){
+	if(c_flag) ++(*n);
+	if(*n & 0xf) c_flag = true;
+	*n << 1;
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	
+}
+inline void GB_CPU::rrc_n(u8 * n){
+	if(*n & 0x1) c_flag = true;
+	*n >> 1;
+	if(c_flag) ++(*n);
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	
+}
+inline void GB_CPU::rr_n(u8 * n){
+	if(c_flag) ++(*n);
+	if(*n & 0x1) c_flag = true;
+	*n >> 1;
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	
+}
+
+inline void GB_CPU::sla_n(u8 * n){}
+inline void GB_CPU::sra_n(u8 * n){}
+inline void GB_CPU::srl_n(u8 * n){}
 	//bit opcodes
-inline void GB_CPU::bit_b_r(){}
-inline void GB_CPU::set_b_r(){}
-inline void GB_CPU::res_b_r(){}
+inline void GB_CPU::bit_b_r(u8 b, u8 * n){}
+inline void GB_CPU::set_b_r(u8 b, u8 * n){}
+inline void GB_CPU::res_b_r(u8 b, u8 * n){}
 	//jumps
 inline void GB_CPU::jp_nn(u16 nn){}
 inline void GB_CPU::jp_cc_nn(bool cc, u16 nn){}
