@@ -77,12 +77,27 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x02:{//ld (bc), a
+			ld_nn_n(RAM + bc);
+			program_counter += 1;
+			clocks += 8;
 		} break;
+
 		case 0x03:{//inc bc
+			inc_nn(&bc);
+			program_counter += 1;
+			clocks += 8;
 		} break;
+
 		case 0x04:{//inc b
+			inc_n(&b);
+			program_counter += 1;
+			clocks += 8;
 		} break;
+
 		case 0x05:{//dec b
+			dec_n(&b);
+			program_counter +=1;
+			clocks += 8;
 		} break;
 
 		case 0x06:{//ld b, d8
@@ -92,18 +107,45 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x07:{//rlca
+			rlca();
+			program_counter += 1;
+			clocks +=4;
 		} break;
-		case 0x08:{
+
+		case 0x08:{//ld (a16), sp
+			ld_nn_sp(read_word());
+			program_counter +=3;
+			clocks +=20;
 		} break;
-		case 0x09:{
+
+		case 0x09:{//add hl,bc
+			add_hl_n(bc);
+			program_counter += 1;
+			program_counter +=8;
 		} break;
-		case 0x0a:{
+
+		case 0x0a:{//ld a, (bc)
+			ld_a_n(RAM + bc);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x0b:{
+
+		case 0x0b:{//dec bc
+			dec_nn(&bc);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x0c:{
+
+		case 0x0c:{//inc c
+			inc_n(&c);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x0d:{
+
+		case 0x0d:{//dec c
+			dec_n(&c);
+			program_counter += 1;
+			clocks +=4;
 		} break;
 
 		case 0x0e:{ //ld c, d8
@@ -112,19 +154,46 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 
-		case 0x0f:{
+		case 0x0f:{//rrca
+			rrca();
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x10:{
+
+		case 0x10:{//stop
+			stop();
+			program_counter += 2;
+			clocks += 4;
 		} break;
-		case 0x11:{
+	
+		case 0x11:{//ld de,d16
+			ld_n_nn(&de);
+			program_counter += 3;
+			clocks += 12;
 		} break;
-		case 0x12:{
+
+		case 0x12:{//ld (de), a
+			ld_nn_n(RAM + de);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x13:{
+
+		case 0x13:{//inc de
+			inc_nn(&de);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x14:{
+
+		case 0x14:{//inc d
+			inc_n(&d);
+			program_counter += 1;
+			clocks += 4;
 		} break;
-		case 0x15:{
+
+		case 0x15:{//dec d
+			dec_n(&d);
+			program_counter += 1;
+			clocks += 4;
 		} break;
 
 		case 0x16:{//ld d, d8
@@ -133,19 +202,45 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 	
-		case 0x17:{
+		case 0x17:{//rla
+			rla();
+			program_counter +=1;
+			clocks += 4;
 		} break;
-		case 0x18:{
+
+		case 0x18:{//jr r8
+			jr_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 12;
 		} break;
-		case 0x19:{
+
+		case 0x19:{//add hl,de
+			add_hl_n(de);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x1a:{
+
+		case 0x1a:{//ld a, (de)
+			ld_a_n(RAM + de);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x1b:{
+
+		case 0x1b:{//dec de
+			dec_nn(&de);
+			program_counter += 1;
+			clocks += 8;
 		} break;
-		case 0x1c:{
+
+		case 0x1c:{//inc e
+			inc_n(&e);
+			program_counter += 1;
+			clocks += 4;
 		} break;
+
 		case 0x1d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 
 		case 0x1e:{//ld e,d8
@@ -155,18 +250,32 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x1f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x20:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x21:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x22:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x23:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x24:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x25:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 
 		case 0x26:{//ld h, d8
@@ -176,18 +285,32 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x27:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x28:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x29:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x2a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x2b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x2c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x2d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 
 		case 0x2e:{//ld l, d8
@@ -197,21 +320,37 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		
 		case 0x2f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		
 		case 0x30:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x3f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 
 		case 0x40:{//ld b,b
@@ -251,377 +390,745 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x46:{//ld b, (hl)
-			ld_r1_r2(&b, &b);
+			ld_r1_r2(&b, RAM + hl);
 			program_counter += 1;
 			clocks += 4;
 		} break;
 		
-		case 0x47:{
+		case 0x47:{//ld b,a
+			ld_r1_r2(&b, &a);
+			program_counter += 1;
+			clocks += 4;
 		} break;
+
 		case 0x48:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x49:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x4f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x50:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x51:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x52:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x53:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x54:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x55:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x56:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x57:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x58:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x59:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x5f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x60:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x61:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x62:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x63:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x64:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x65:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x66:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x67:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x68:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x69:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x6f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x70:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x71:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x72:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x73:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x74:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x75:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x76:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x77:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x78:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x79:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x7f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x80:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x81:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x82:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x83:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x84:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x85:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x86:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x87:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x88:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x89:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x8f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x90:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x91:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x92:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x93:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x94:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x95:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x96:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x97:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x98:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x99:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9a:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9b:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9c:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9d:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9e:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0x9f:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xa9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xaa:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xab:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xac:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xae:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xaf:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xb9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xba:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xbb:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xbc:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xbd:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xbe:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xbf:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xc9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xca:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		//cb leads to more opcodes, see nested switch toward end
 		case 0xcc:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xcd:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xce:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xcf:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xd9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xda:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xdb:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xdc:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xdd:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xde:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xdf:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xe9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xea:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xeb:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xec:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xed:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xee:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xef:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf0:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf1:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf2:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf3:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf4:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf5:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf6:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf7:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf8:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xf9:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xfa:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xfb:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xfc:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xfd:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xfe:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 		case 0xff:{
+			program_counter += 1;
+			clocks += 8;
 		} break;
 
 		case 0xcb:{
@@ -629,484 +1136,965 @@ void GB_CPU::execute_opcode(u8 op){
 			u8 op2 = RAM[program_counter];
 			switch(op2){
 						case 0x00:{//nop
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x01:{//ld bc, d16
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x02:{//ld (bc), a
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x03:{//inc bc
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x04:{//inc b
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x05:{//dec b
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x06:{//ld b, d8
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x07:{//rlca
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x08:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x09:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x0f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x10:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x11:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x12:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x13:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x14:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x15:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x16:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x17:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x18:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x19:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x1f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x20:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x21:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x22:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x23:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x24:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x25:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x26:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x27:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x28:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x29:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x30:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x3f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x40:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x41:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x42:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x43:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x44:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x45:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x46:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 
 						case 0x47:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x48:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x49:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x4f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x50:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x51:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x52:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x53:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x54:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x55:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x56:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x57:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x58:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x59:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x5f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x60:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x61:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x62:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x63:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x64:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x65:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x66:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x67:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x68:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x69:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x6f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x70:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x71:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x72:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x73:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x74:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x75:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x76:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x77:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x78:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x79:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x7f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x80:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x81:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x82:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x83:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x84:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x85:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x86:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x87:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x88:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x89:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x8f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x90:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x91:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x92:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x93:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x94:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x95:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x96:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x97:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x98:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x99:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9a:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9b:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9c:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9d:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9e:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0x9f:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xa9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xaa:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xab:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xac:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xae:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xaf:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xb9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xba:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xbb:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xbc:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xbd:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xbe:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xbf:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xc9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xca:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
-						//cb leads to more opcodes, see nested switch toward end
+						case 0xcb:{
+							program_counter += 1;
+							clocks += 8;
+						}break;
 						case 0xcc:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xcd:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xce:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xcf:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xd9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xda:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xdb:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xdc:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xdd:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xde:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xdf:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xe9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xea:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xeb:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xec:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xed:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xee:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xef:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf0:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf1:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf2:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf3:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf4:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf5:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf6:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf7:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf8:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xf9:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xfa:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xfb:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xfc:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xfd:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xfe:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 						case 0xff:{
+							program_counter += 1;
+							clocks += 8;
 						} break;
 
 			}
@@ -1249,7 +2237,7 @@ inline void GB_CPU::ld_r1_r2(u8 * r1, u8 * r2){
 	*r1 = *r2;
 }
 
-inline void GB_CPU::ld_a_n(u16 * n){
+inline void GB_CPU::ld_a_n(u8 * n){
 	a = *n;
 }
 
@@ -1296,6 +2284,7 @@ inline void GB_CPU::ldh_a_n(u16 n){
 inline void GB_CPU::ld_n_nn(u16 * n){
 	program_counter +=2;
 	*n = read_word();
+	program_counter -=2;
 }
 
 inline void GB_CPU::ld_sp_hl(){
@@ -1477,7 +2466,7 @@ inline void GB_CPU::rla(){
 	n_flag = false;
 	h_flag = false;
 }
-inline void GB_CPU::rrcs(){
+inline void GB_CPU::rrca(){
 	if(a%2) c_flag = true;
 	else c_flag = false;
 	a >> 1;
