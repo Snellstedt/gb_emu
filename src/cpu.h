@@ -101,7 +101,7 @@ private:
 	inline void ld_hl_sp_n(int n);
 	inline void ld_nn_sp(int nn);
 	inline void push_nn(u16 nn);
-	inline void pop_nn(u16 nn);
+	inline void pop_nn(u16 * nn);
 
 	//8 bit ALU
 	inline void add_a_n(u8 n);
@@ -152,22 +152,22 @@ private:
 	inline void res_b_r(u8 b, u8 * n);
 
 	//jumps
-	inline void jp_nn(u16 nn);
-	inline void jp_cc_nn(bool cc, u16 nn);
+	inline void jp_nn();
+	inline void jp_cc_nn();
 	inline void jp_hl();
-	inline void jr_n(u8 n);
-	inline void jr_cc_n(bool cc, u8 n);
+	inline void jr_n();
+	inline void jr_cc_n();
 
 	//calls
-	inline void call_nn(u16 nn);
-	inline void call_cc_nn(bool cc, u16 nn);
+	inline void call_nn();
+	inline void call_cc_nn();
 
 	//restarts
 	inline void rst_n(u8 n);
 
 	//returns
 	inline void ret();
-	inline void ret_cc(bool cc);
+	inline void ret_cc();
 	inline void reti();
 
 
@@ -212,6 +212,7 @@ General Memory Map -- taken from pandocs
 	bool n_flag;//subtract
 	bool h_flag;//half carry
 	bool c_flag;//carry
+	bool ei_flag;//enable interrupts
 
 	unsigned int stack_pointer;
 	unsigned int program_counter;
