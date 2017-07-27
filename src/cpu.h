@@ -214,8 +214,8 @@ General Memory Map -- taken from pandocs
 	bool c_flag;//carry
 	bool ei_flag;//enable interrupts
 
-	unsigned int stack_pointer;
-	unsigned int program_counter;
+	unsigned short stack_pointer;
+	unsigned short program_counter;
 	unsigned long clocks;
 
 	//registers - same method as Cinoop, credit given to cturt

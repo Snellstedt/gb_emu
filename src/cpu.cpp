@@ -2656,24 +2656,36 @@ inline void GB_CPU::jr_cc_n(){
 
 	//calls
 inline void GB_CPU::call_nn(){
-	--stack_pointer;
-	RAM[stack_pointer] = program_counter + 3;
+	push_nn(program_counter + 3);
 	program_counter = read_word();
 }
 inline void GB_CPU::call_cc_nn(){
+	switch(RAM[program_counter]){
+		case 0xc4:{if(!z_flag) call_nn();}break;
+		case 0xcc:{if(z_flag) call_nn();}break;
+		case 0xd4:{if(!c_flag) call_nn();}break;
+		case 0xdc:{if(c_flag) call_nn();}break;
+	}
 
 }
 	//restarts
 inline void GB_CPU::rst_n(u8 n){
-	--stack_pointer;
-	RAM[stack_pointer] = program_counter;
+	push_nn(program_counter);
 	program_counter = n;
 }
 	//returns
 inline void GB_CPU::ret(){
-
+	pop_nn(&program_counter);
 }
 inline void GB_CPU::ret_cc(){
-
+	switch(RAM[program_counter]){
+		case 0xc0:{if(!z_flag) ret();}break;
+		case 0xc8:{if(z_flag) ret();}break;
+		case 0xd0:{if(!c_flag) ret();}break;
+		case 0xd8:{if(c_flag) ret();}break;
+	}
 }
-inline void GB_CPU::reti(){}
+inline void GB_CPU::reti(){
+	ret();
+	ei_flag = true;
+}
