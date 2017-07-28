@@ -2444,7 +2444,28 @@ inline void GB_CPU::swap_n(u8 * n){
 	c_flag = false;
 }
 inline void GB_CPU::daa(){
-	//TODO: need to do homework here
+	u8 cf = 0;
+	u8 a_temp = a;
+	if(a > 0x99 || c_flag){
+		c_flag = true;
+		cf += 0x60;
+	}
+	else{
+		c_flag = false;
+	}
+	if(a & 0x0f > 9 || h_flag){
+		cf += 0x06;
+
+	}
+	if(!n_flag){
+		a += cf;
+	}
+	else{
+		a -= cf;
+	}
+	if(a == 0) z_flag = true;
+	if(a ^ a_temp) h_flag = true;
+
 }
 inline void GB_CPU::cpl(){
 	a = ~a;
