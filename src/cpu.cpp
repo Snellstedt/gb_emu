@@ -392,7 +392,7 @@ void GB_CPU::execute_opcode(u8 op){
 		case 0x46:{//ld b, (hl)
 			ld_r1_r2(&b, RAM + hl);
 			program_counter += 1;
-			clocks += 4;
+			clocks += 8;
 		} break;
 		
 		case 0x47:{//ld b,a
@@ -401,229 +401,285 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 4;
 		} break;
 
-		case 0x48:{
+		case 0x48:{//ld c,b
+			ld_r1_r2(&c,&b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x49:{//ld c,c
+			ld_r1_r2(&c,&c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x4a:{//ld c,d 
+			ld_r1_r2(&c,&d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x4b:{//ld c, e
+			ld_r1_r2(&c,&e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x4c:{//ld c, h
+			ld_r1_r2(&c,&h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x4d:{//ld c, l
+			ld_r1_r2(&c,&l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x4e:{// ld c, (hl)
+			ld_r1_r2(&c, RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x49:{
+		case 0x4f:{// ld c,a
+			ld_r1_r2(&c, &a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x50:{//ld d,b
+			ld_r1_r2(&d,&b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x51:{//ld d,c
+			ld_r1_r2(&d,&c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x52:{//ld d,d
+			ld_r1_r2(&d,&d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x53:{//ld d,e
+			ld_r1_r2(&d,&e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x54:{//ld d,h
+			ld_r1_r2(&d,&h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x55:{//ld d,l
+			ld_r1_r2(&d,&l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x56:{//ld d, hl
+			ld_r1_r2(&d,RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4a:{
+		case 0x57:{//ld d,a 
+			ld_r1_r2(&d,&a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x58:{//ld e,b
+			ld_r1_r2(&e,&b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x59:{//ld e,c
+			ld_r1_r2(&e,&c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x5a:{//ld e,d
+			ld_r1_r2(&e, &d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x5b:{//ld e,e
+			ld_r1_r2(&e, &e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x5c:{//ld e,h
+			ld_r1_r2(&e, &h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x5d:{//ld e,l
+			ld_r1_r2(&e, &l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x5e:{//ld e, (hl)
+			ld_r1_r2(&e,RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4b:{
+		case 0x5f:{//ld e,a
+			ld_r1_r2(&e, &a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x60:{//ld h,b
+			ld_r1_r2(&h, &b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x61:{//ld h,c
+			ld_r1_r2(&h,&c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x62:{//ld h,d
+			ld_r1_r2(&h,&d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x63:{//ld h, e
+			ld_r1_r2(&h, &e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x64:{//ld h,h
+			ld_r1_r2(&h, &h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x65:{//ld h,l
+			ld_r1_r2(&h,&l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x66:{//ld h, (hl)
+			ld_r1_r2(&h,RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4c:{
+		case 0x67:{//ld h,a
+			ld_r1_r2(&h, &a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x68:{//ld l,b
+			ld_r1_r2(&l, &b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x69:{//ld l,c
+			ld_r1_r2(&l, &c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x6a:{//ld l,d
+			ld_r1_r2(&l, &d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x6b:{//ld l,e
+			ld_r1_r2(&l, &e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x6c:{//ld l,h
+			ld_r1_r2(&l, &h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x6d:{//ld l, l
+			ld_r1_r2(&l, &l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x6e:{//ld l,hl
+			ld_r1_r2(&l, RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4d:{
+		case 0x6f:{//ld l,a 
+			ld_r1_r2(&l,&a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x70:{//ld (hl), b
+			ld_r1_r2(RAM + hl, &b);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4e:{
+		case 0x71:{//ld (hl),c
+			ld_r1_r2(RAM + hl, &c);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x4f:{
+		case 0x72:{//ld (hl), d
+			ld_r1_r2(RAM + hl, &d);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x50:{
+		case 0x73:{//ld (hl), e
+			ld_r1_r2(RAM + hl, &e);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x51:{
+		case 0x74:{//ld (hl), h
+			ld_r1_r2(RAM + hl, &h);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x52:{
+		case 0x75:{//ld (hl), l
+			ld_r1_r2(RAM + hl, &l);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x53:{
+		case 0x76:{// halt
+			halt();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x77:{//ld (hl),a
+			ld_r1_r2(RAM + hl, &a);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x54:{
+		case 0x78:{// la a,b
+			ld_r1_r2(&a,&b);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x55:{
+		case 0x79:{//ld a,c
+			ld_r1_r2(&a,&c);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x56:{
+		case 0x7a:{//ld a,d
+			ld_r1_r2(&a,&d);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x57:{
+		case 0x7b:{//ld a,e
+			ld_r1_r2(&a,&e);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x58:{
+		case 0x7c:{//ld a,h
+			ld_r1_r2(&a,&h);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x59:{
+		case 0x7d:{//ld a,l
+			ld_r1_r2(&a,&l);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x5a:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x5b:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x5c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x5d:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x5e:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x5f:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x60:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x61:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x62:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x63:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x64:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x65:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x66:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x67:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x68:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x69:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6a:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6b:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6d:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6e:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x6f:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x70:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x71:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x72:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x73:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x74:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x75:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x76:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x77:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x78:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x79:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x7a:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x7b:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x7c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x7d:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x7e:{
+		case 0x7e:{//ld a,hl
+			ld_r1_r2(&a,RAM + hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
 		case 0x7f:{
+			ld_r1_r2(&a,&a);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
 		case 0x80:{
 			program_counter += 1;
