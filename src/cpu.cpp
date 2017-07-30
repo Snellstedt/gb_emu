@@ -676,262 +676,330 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x7f:{
+		case 0x7f:{//ld a,a
 			ld_r1_r2(&a,&a);
 			program_counter += 1;
 			clocks += 4;
 		} break;
-		case 0x80:{
+		case 0x80:{//add a,b
+			add_a_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x81:{//add a,c
+			add_a_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x82:{//add a,d
+			add_a_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x83:{//add a,e
+			add_a_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x84:{//add a,h
+			add_a_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x85:{//add a, l
+			add_a_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x86:{//add a,(hl)
+			add_a_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x81:{
+		case 0x87:{//add a,a
+			add_a_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x88:{//adc a, b
+			adc_a_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x89:{//adc a, c
+			adc_a_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x8a:{//adc a, d
+			adc_a_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x8b:{//adc a,e
+			adc_a_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x8c:{//adc a,h
+			adc_a_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x8d:{//adc a,l
+			adc_a_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x8e:{//adc a,(hl)
+			adc_a_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x82:{
+		case 0x8f:{//adc a,a
+			adc_a_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x90:{//sub b
+			sub_a_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x91:{//sub c
+			sub_a_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x92:{//sub d
+			sub_a_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x93:{//sub e
+			sub_a_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x94:{//sub h
+			sub_a_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x95:{//sub l
+			sub_a_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x96:{//sub (hl)
+			sub_a_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x83:{
+		case 0x97:{//sub a
+			sub_a_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x98:{//sbc a,b
+			sbc_a_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x99:{//sbc a,c
+			sub_a_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x9a:{//sbc a,d
+			sub_a_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x9b:{//sbd a,e
+			sub_a_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x9c:{//sbc a,h
+			sub_a_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x9d:{//sbc a,l
+			sub_a_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x9e:{//sbc a, (hl)
+			sub_a_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x84:{
+		case 0x9f:{//sbc a,a
+			sub_a_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa0:{//and b
+			and_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa1:{//and c
+			and_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa2:{//and d
+			and_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa3:{//and e
+			and_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa4:{//and h
+			and_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa5:{//and l
+			and_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa6:{//and (hl)
+			and_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x85:{
+		case 0xa7:{//and a
+			and_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa8:{//xor b
+			xor_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xa9:{//xor c
+			xor_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xaa:{//xor d
+			xor_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xab:{//xor e
+			xor_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xac:{//xor h
+			xor_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xad:{//xor l
+			xor_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xae:{//xor (hl)
+			xor_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x86:{
+		case 0xaf:{//xor a
+			xor_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb0:{// or b
+			or_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb1:{//or c
+			or_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb2:{//or d
+			or_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb3:{//or e
+			or_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb4:{//or h
+			or_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb5:{//or l
+			or_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb6:{//or (hl)
+			or_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x87:{
+		case 0xb7:{//or a
+			or_n(a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb8:{//cp b
+			cp_n(b);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xb9:{//cp c
+			cp_n(c);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xba:{//cp d
+			cp_n(d);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xbb:{//cp e
+			cp_n(e);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xbc:{//cp h
+			cp_n(h);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xbd:{//cp l
+			cp_n(l);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xbe:{//cp (hl)
+			cp_n(RAM[hl]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x88:{
+		case 0xbf:{//cp a
+			cp_n(a);
 			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x89:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8a:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8b:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8d:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8e:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x8f:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x90:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x91:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x92:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x93:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x94:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x95:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x96:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x97:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x98:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x99:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9a:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9b:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9d:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9e:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x9f:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa0:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa1:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa2:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa3:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa4:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa5:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa6:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa7:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa8:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xa9:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xaa:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xab:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xac:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xae:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xaf:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb0:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb1:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb2:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb3:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb4:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb5:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb6:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb7:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb8:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xb9:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xba:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xbb:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xbc:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xbd:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xbe:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xbf:{
-			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
 		case 0xc0:{
 			program_counter += 1;
