@@ -238,7 +238,8 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 4;
 		} break;
 
-		case 0x1d:{
+		case 0x1d:{//dec e
+			dec_n(&e);
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -249,33 +250,40 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 
-		case 0x1f:{
+		case 0x1f:{//rra
+			rra();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x20:{
+		case 0x20:{//jr nz,r8
+			jr_cc_n();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x21:{
+		case 0x21:{//ld hl, d16
+			ld_n_nn(&hl);
+			program_counter += 3;
+			clocks += 12;
+		} break;
+		case 0x22:{//ld hl+, a
+			ldi_hl_a();	
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x22:{
+		case 0x23:{//inc hl
+			inc_nn(&hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x23:{
+		case 0x24:{//inc h
+			inc_n(&h);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x24:{
+		case 0x25:{//dec h
+			dec_n(&h);
 			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x25:{
-			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
 
 		case 0x26:{//ld h, d8
@@ -284,33 +292,39 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 
-		case 0x27:{
+		case 0x27:{//daa
+			daa();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x28:{//jr z,r8
+			jr_cc_n();
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0x29:{//add hl,hl
+			add_hl_n(hl);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x28:{
+		case 0x2a:{//ld a, hl+
+			ldi_a_hl();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x29:{
+		case 0x2b:{//dec
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x2a:{
+		case 0x2c:{//inc l
+			inc_n(&l);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
-		case 0x2b:{
+		case 0x2d:{//dec l
+			dec_n(&l);
 			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x2c:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0x2d:{
-			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
 
 		case 0x2e:{//ld l, d8
@@ -319,36 +333,90 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter +=2;
 		} break;
 		
-		case 0x2f:{//rra
+		case 0x2f:{//cpl
+			cpl();
 			program_counter += 1;
-			clocks += 8;
+			clocks += 4;
 		} break;
 		
-		case 0x30:{
+		case 0x30:{//jr nc, r8
+			jr_cc_n();
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0x31:{//ld sp,d16
+			ld_n_nn(&stack_pointer);
+			program_counter += 3;
+			clocks += 12;
+		} break;
+		case 0x32:{//ld hld, a
+			ldd_hl_a();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3a:{
+		case 0x33:{//inc sp
+			inc_nn(&stack_pointer);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3b:{
+		case 0x34:{//inc (hl)
+			inc_n(RAM + hl);
+			program_counter += 1;
+			clocks += 12;
+		} break;
+		case 0x35:{//dec (hl)
+			dec_n(RAM + hl);
+			program_counter += 1;
+			clocks += 12;
+		} break;
+		case 0x36:{//ld (hl), d8
+			ld_nn_n(RAM + hl);
+			program_counter += 2;
+			clocks += 12;
+		} break;
+		case 0x37:{//scf
+			scf();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x38:{//jr c, r8
+			jr_cc_n();
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0x39:{//add hl,sp
+			add_hl_n(stack_pointer);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3c:{
+		case 0x3a:{//ld a, hl-
+			ldd_a_hl();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3d:{
+		case 0x3b:{//dec sp
+			dec_nn(&stack_pointer);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3e:{
+		case 0x3c:{//inc a
+			inc_n(&a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x3d:{//dec a
+			dec_n(&a);
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0x3e:{//ld a,d8
+			program_counter += 1;
+			ld_a_n(RAM + program_counter);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0x3f:{
+		case 0x3f:{//ccf
+			ccf();
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -1256,6 +1324,9 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter += 1;
 			clocks += 8;
 		} break;
+
+		//////////////////////////////////////////////////
+		//// prefix CB instructions
 
 		case 0xcb:{
 			program_counter += 1;
@@ -2372,7 +2443,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0xde:{//set 3,(hl)
-							set_b_r(3,RAm + hl);
+							set_b_r(3,RAM + hl);
 							program_counter += 1;
 							clocks += 16;
 						} break;
