@@ -58,11 +58,13 @@ public:
 	void tick(){
 		//delay to keep clock in sync
 
-		//check interrupts
-
-		//fetch
-		u8 op = RAM[program_counter];
 		//decode
+		//check interrupts
+		char a;
+		//fetch
+		op = RAM[program_counter];
+		std::cout << std::hex << op << ' ' << program_counter << '\n';
+		std::cin >> a;
 		execute_opcode(op);
 		//execute
 		// program_counter += 1;
@@ -206,6 +208,7 @@ General Memory Map -- taken from pandocs
   FFFF        Interrupt Enable Register
 	*/
 	unsigned char RAM[0xFFFF];
+	u8 op;
 
 	//flags
 	bool z_flag;//zero 

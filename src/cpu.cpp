@@ -1069,260 +1069,311 @@ void GB_CPU::execute_opcode(u8 op){
 			program_counter += 1;
 			clocks += 4;
 		} break;
-		case 0xc0:{
+		case 0xc0:{//ret nz
+			ret();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xc1:{
+		case 0xc1:{//pop bc
+			pop_nn(&bc);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xc2:{
+		case 0xc2:{//jp nz, a16
+			jp_cc_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xc3:{//jp a16
+			jp_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xc4:{//call nz, a16
+			call_cc_nn();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xc3:{
+		case 0xc5:{//push bc
+			push_nn(bc);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xc6:{//add a,d8
+			add_a_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xc7:{//rst 0x0
+			rst_n(0x0);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xc4:{
+		case 0xc8:{//ret z
+			ret_cc();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xc5:{
+		case 0xc9:{//ret
+			ret();
 			program_counter += 1;
-			clocks += 8;
+			clocks += 16;
 		} break;
-		case 0xc6:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xc7:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xc8:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xc9:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xca:{
+		case 0xca:{//jp z,a16
+			jp_cc_nn();
 			program_counter += 1;
 			clocks += 8;
 		} break;
 		//cb leads to more opcodes, see nested switch toward end
-		case 0xcc:{
+		case 0xcc:{//call z,a16
+			call_cc_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xcd:{//call a16
+			call_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xce:{//adc a,d8
+			adc_a_n(RAM[program_counter + 1]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xcd:{
+		case 0xcf:{//rst 0x08
+			rst_n(0x8);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xce:{
+		case 0xd0:{//ret nc
+			ret_cc();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xcf:{
+		case 0xd1:{//pop bc
+			pop_nn(&bc);
+			program_counter += 1;
+			clocks += 12;
+		} break;
+		case 0xd2:{//jp nc, a16
+			jp_cc_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xd3:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd0:{
+		case 0xd4:{//call nc,a16
+			call_cc_nn();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd1:{
+		case 0xd5:{//push de
+			push_nn(de);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd2:{
+		case 0xd6:{//sub d8
+			sub_a_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xd7:{//rst 0x10
+			rst_n(0x10);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xd8:{//ret c
+			ret_cc();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd3:{
+		case 0xd9:{//reti
+			reti();
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xda:{//jp c,a16
+			jp_cc_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xdb:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd4:{
+		case 0xdc:{//call c,a16
+			call_cc_nn();
+			program_counter += 3;
+			clocks += 8;
+		} break;
+		case 0xdd:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd5:{
+		case 0xde:{//sbc a,d8
+			sbc_a_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xdf:{//rst 0x18
+			rst_n(0x18);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xe0:{//ldh (a8), a
+			ldh_n_a(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 12;
+		} break;
+		case 0xe1:{//pop hl
+			pop_nn(&hl);
+			program_counter += 1;
+			clocks += 12;
+		} break;
+		case 0xe2:{//ld (c), a
+			ld_c_a();
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xe3:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd6:{
+		case 0xe4:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd7:{
+		case 0xe5:{//push hl
+			push_nn(hl);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xe6:{//and d8
+			and_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xe7:{//rst 0x20
+			rst_n(0x20);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xe8:{//add sp,r8
+			add_sp_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 16;
+		} break;
+		case 0xe9:{//jp (hl)
+			jp_hl();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xea:{//ld (a16), a
+			u16 temp = read_word();
+			ld_n_a(&temp);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd8:{
+		case 0xeb:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xd9:{
+		case 0xec:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xda:{
+		case 0xed:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xdb:{
+		case 0xee:{//xor d8
+			xor_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xef:{//rst 0x28
+			rst_n(0x28);
+			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xf0:{//ldh a, (a8
+			ldh_a_n(RAM[program_counter + 1]);
+			program_counter += 2;
+			clocks += 12;
+		} break;
+		case 0xf1:{//pop af
+			pop_nn(&af);
+			program_counter += 1;
+			clocks += 12;
+		} break;
+		case 0xf2:{//ld a, (c)
+			ld_a_c();
+			program_counter += 2;
+			clocks += 8;
+		} break;
+		case 0xf3:{//di
+			di();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xf4:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xdc:{
+		case 0xf5:{//push af
+			push_nn(af);
 			program_counter += 1;
+			clocks += 16;
+		} break;
+		case 0xf6:{//or d8
+			or_n(RAM[program_counter + 1]);
+			program_counter += 2;
 			clocks += 8;
 		} break;
-		case 0xdd:{
+		case 0xf7:{//rst 0x30
+			rst_n(0x30);
 			program_counter += 1;
-			clocks += 8;
+			clocks += 16;
 		} break;
-		case 0xde:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xdf:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe0:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe1:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe2:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe3:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe4:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe5:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe6:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe7:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe8:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xe9:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xea:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xeb:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xec:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xed:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xee:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xef:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf0:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf1:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf2:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf3:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf4:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf5:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf6:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf7:{
-			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xf8:{
+		case 0xf8:{//ld hl, sp + d8
 			ld_hl_sp_n(RAM[program_counter + 1]);
 			program_counter += 2;
 			clocks += 12;
 		} break;
-		case 0xf9:{
+		case 0xf9:{//ld sp, hl
 			ld_sp_hl();
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xfa:{
+		case 0xfa:{//ld a, (a16)
+			ld_a_n(&RAM[read_word()]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xfb:{
+		case 0xfb:{//ei
+			ei();
+			program_counter += 1;
+			clocks += 4;
+		} break;
+		case 0xfc:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xfc:{
+		case 0xfd:{//unused
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xfd:{
+		case 0xfe:{//cp d8
+			cp_n(RAM[program_counter + 1]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
-		case 0xfe:{
+		case 0xff:{//rst 0x38
+			rst_n(0x38);
 			program_counter += 1;
-			clocks += 8;
-		} break;
-		case 0xff:{
-			program_counter += 1;
-			clocks += 8;
+			clocks += 16;
 		} break;
 
 		//////////////////////////////////////////////////
