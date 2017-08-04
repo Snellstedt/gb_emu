@@ -1081,12 +1081,12 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xc2:{//jp nz, a16
 			jp_cc_nn();
-			program_counter += 3;
+			// program_counter += 3;
 			clocks += 8;
 		} break;
 		case 0xc3:{//jp a16
 			jp_nn();
-			program_counter += 3;
+			// program_counter += 3;
 			clocks += 8;
 		} break;
 		case 0xc4:{//call nz, a16
@@ -1121,11 +1121,11 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xca:{//jp z,a16
 			jp_cc_nn();
-			program_counter += 1;
+			// program_counter += 1;
 			clocks += 8;
 		} break;
 		//cb leads to more opcodes, see nested switch toward end
-		case 0xcc:{//call z,a16
+		case 0xcc:{//call z,a16jp
 			call_cc_nn();
 			program_counter += 3;
 			clocks += 8;
@@ -1157,7 +1157,7 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xd2:{//jp nc, a16
 			jp_cc_nn();
-			program_counter += 3;
+			// program_counter += 3;
 			clocks += 8;
 		} break;
 		case 0xd3:{//unused
@@ -1196,7 +1196,7 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xda:{//jp c,a16
 			jp_cc_nn();
-			program_counter += 3;
+			// program_counter += 3;
 			clocks += 8;
 		} break;
 		case 0xdb:{//unused
@@ -1267,7 +1267,7 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xe9:{//jp (hl)
 			jp_hl();
-			program_counter += 1;
+			// program_counter += 1;
 			clocks += 4;
 		} break;
 		case 0xea:{//ld (a16), a
@@ -1366,7 +1366,8 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 8;
 		} break;
 		case 0xfe:{//cp d8
-			cp_n(RAM[program_counter + 1]);
+			program_counter += 1;
+			cp_n(RAM[program_counter]);
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -2737,9 +2738,9 @@ inline void GB_CPU::ldh_a_n(u16 n){
 
 	//16 bit loads
 inline void GB_CPU::ld_n_nn(u16 * n){
-	program_counter +=2;
+	// program_counter +=2;
 	*n = read_word();
-	program_counter -=2;
+	// program_counter -=2;
 }
 
 inline void GB_CPU::ld_sp_hl(){
@@ -3119,7 +3120,7 @@ inline void GB_CPU::jr_n(){
 }
 inline void GB_CPU::jr_cc_n(){
 	//TODO
-	int jump = static_cast<int>(RAM[program_counter + 1]);
+	int jump = static_cast<u8>(RAM[program_counter + 1]);
 	switch(RAM[program_counter]){
 		case 0x20:{if(!z_flag) program_counter += jump ;}break;
 		case 0x28:{if(z_flag) program_counter += jump ;}break;

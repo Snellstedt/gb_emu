@@ -12,15 +12,17 @@ int main(int argc, char** args){
 
 	std::string rom_name;
     int c;
+    bool debug = false;
     //process command line//////////////////////////////////////////////////////////
     while (1) {
         static struct option long_options[] = {
-            { "rom", required_argument, 0, 'r' },
+                { "rom", required_argument, 0, 'r' },
+                { "debug", no_argument, 0, 'd'},
                 { 0,0,0,0 }
             };
             /*getopt_long stores the option index here*/
             int option_index = 0;
-            c = getopt_long(argc, args, "r:",long_options, &option_index);
+            c = getopt_long(argc, args, "r:d",long_options, &option_index);
 
             //detect the end of the options
             if (c == -1) break;
@@ -35,6 +37,11 @@ int main(int argc, char** args){
                 break;
             }
 
+            case 'd':{
+                debug = true;
+                break;
+            }
+
             default:
                 std::cerr << "You dun goofed\n";
                 return 1;
@@ -43,7 +50,7 @@ int main(int argc, char** args){
     }// end while loop
     ///end getopt //////////////////////////////////////////////////////////////////
 
-	GB_CPU gb_cpu(rom_name);
+	GB_CPU gb_cpu(rom_name, debug);
 	gb_cpu.reset();
 
     //Event handler

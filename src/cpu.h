@@ -13,8 +13,10 @@ class GB_CPU{
 public:
 
 	//constructor 
-	GB_CPU(const std::string & ROM_file){
+	GB_CPU(const std::string & ROM_file, bool debug_in){
 
+		//turn on debugging
+		debug = debug_in;
 
 		//set RAM to zero
 		memset(RAM, 0, 0xFFFF);
@@ -59,12 +61,46 @@ public:
 		//delay to keep clock in sync
 
 		//decode
+		if(debug){
+
+			std::cout << std::hex <<
+				" ( " << static_cast<u16>(RAM[program_counter]) << ' ' << static_cast<u16>(RAM[program_counter + 1]) << 
+				' ' << static_cast<u16>(RAM[program_counter + 2]) << " ) \n" <<
+			
+				 "Current opcode: " << static_cast<u16>(op) << ' ' << 
+				"    Program counter: " << program_counter << "    Stack pointer: " <<
+				stack_pointer << 
+				'\n' <<
+				"8-bit Register status: \n    a: " << static_cast<u16>(a) << 
+				" b: " << static_cast<u16>(b) << 
+				" c: " << static_cast<u16>(c) << 
+				" d: " << static_cast<u16>(d) << 
+				" e: " << static_cast<u16>(e) << 
+				" f: " << static_cast<u16>(f) << 
+				" h: " << static_cast<u16>(h) << 
+				" l: " << static_cast<u16>(l) << 
+				'\n' <<
+				"16 bit register status: \n    af: " << af <<
+				" bc: " << bc <<
+				" de: " << de << 
+				" hl: " << hl <<
+				'\n' <<
+				"Flags: \n" <<
+				"    Zero: " << z_flag <<
+				" Carry: " << c_flag <<
+				" Half Carry: " << h_flag <<
+				" Subtract: " << n_flag << 
+				"\n\n";
+
+
+
+			std::cin.get();
+		}
 		//check interrupts
 		char a;
 		//fetch
 		op = RAM[program_counter];
-		std::cout << std::hex << op << ' ' << program_counter << '\n';
-		std::cin >> a;
+
 		execute_opcode(op);
 		//execute
 		// program_counter += 1;
@@ -209,6 +245,8 @@ General Memory Map -- taken from pandocs
 	*/
 	unsigned char RAM[0xFFFF];
 	u8 op;
+
+	bool debug;
 
 	//flags
 	bool z_flag;//zero 
