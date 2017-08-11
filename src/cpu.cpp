@@ -2686,19 +2686,62 @@ void GB_CPU::execute_opcode(u8 op){
 
 	//8 bit loads
 inline void GB_CPU::ld_nn_n(u8 * nn){
-	*nn = RAM[program_counter + 1];
+	++program_counter;
+	*nn = RAM[program_counter];
+	++program_counter;
+	clocks += 8;
 }
 
 inline void GB_CPU::ld_r1_r2(u8 * r1, u8 * r2){
 	*r1 = *r2;
+	++program_counter;
+	clocks += 4;
+}
+
+inline void GB_CPU::ld_r1_r2_hl(u8 * r1, u8 * r2){
+	*r1 = *r2;
+	++program_counter;
+	clocks += 8;
+}
+
+inline void GB_CPU::ld_r1_r2_hl_n(u8 * r1, u8 * r2){
+	*r1 = *r2;
+	++program_counter;
+	clocks += 8;
 }
 
 inline void GB_CPU::ld_a_n(u8 * n){
 	a = *n;
+	++program_counter;
+	clocks += 4;
+}
+
+inline void GB_CPU::ld_a_n_addr(u8 * n){
+	a = *n;
+	++program_counter;
+	clocks += 8;
+}
+inline void GB_CPU::ld_a_n_addr_nn(){
+	//used by instruction fa
+	a = RAM[read_word()];
+	program_counter += 3;
+	clocks += 16;
 }
 
 inline void GB_CPU::ld_n_a(u16 * n){
 	*n = a;
+	++program_counter;
+	clocks += 4;
+}
+inline void GB_CPU::ld_n_a_addr(u16 n){
+	RAM[n] = a;
+	++program_counter;
+	clocks += 8;
+}
+inline void GB_CPU::ld_n_a_addr_nn(){
+	RAM[read_word()] = a;
+	program_counter += 3;
+	clocks += 16;
 }
 
 inline void GB_CPU::ld_a_c(){
