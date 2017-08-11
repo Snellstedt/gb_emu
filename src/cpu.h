@@ -136,19 +136,21 @@ private:
 	inline void ldd_hl_a();
 	inline void ldi_a_hl();
 	inline void ldi_hl_a();
-	inline void ldh_n_a(u16 n);
-	inline void ldh_a_n(u16 n);
+	inline void ldh_n_a();
+	inline void ldh_a_n();
 
 	//16 bit loads
 	inline void ld_n_nn(u16 * n);
 	inline void ld_sp_hl();
-	inline void ld_hl_sp_n(int n);
-	inline void ld_nn_sp(int nn);
+	inline void ld_hl_sp_n();
+	inline void ld_nn_sp();
 	inline void push_nn(u16 nn);
 	inline void pop_nn(u16 * nn);
 
 	//8 bit ALU
 	inline void add_a_n(u8 n);
+	inline void add_a_addr();
+	inline void add_a_imm();
 	inline void adc_a_n(u8 n);
 	inline void sub_a_n(u8 n);
 	inline void sbc_a_n(u8 n);

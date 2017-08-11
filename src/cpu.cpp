@@ -113,7 +113,7 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 
 		case 0x08:{//ld (a16), sp
-			ld_nn_sp(read_word());
+			ld_nn_sp();
 			program_counter +=3;
 			clocks +=20;
 		} break;
@@ -1223,7 +1223,7 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 16;
 		} break;
 		case 0xe0:{//ldh (a8), a
-			ldh_n_a(RAM[program_counter + 1]);
+			ldh_n_a();
 			program_counter += 2;
 			clocks += 12;
 		} break;
@@ -1299,7 +1299,7 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 16;
 		} break;
 		case 0xf0:{//ldh a, (a8
-			ldh_a_n(RAM[program_counter + 1]);
+			ldh_a_n();
 			program_counter += 2;
 			clocks += 12;
 		} break;
@@ -1338,7 +1338,7 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 16;
 		} break;
 		case 0xf8:{//ld hl, sp + d8
-			ld_hl_sp_n(RAM[program_counter + 1]);
+			ld_hl_sp_n();
 			program_counter += 2;
 			clocks += 12;
 		} break;
@@ -2746,58 +2746,94 @@ inline void GB_CPU::ld_n_a_addr_nn(){
 
 inline void GB_CPU::ld_a_c(){
 	a = RAM[0xFF00 + c];
+	program_counter += 2;
+	clocks += 8;
 }
 
 inline void GB_CPU::ld_c_a(){
 	RAM[0xFF00 + c] = a;
+	program_counter += 2;
+	clocks += 8;
 }
 
 inline void GB_CPU::ldd_a_hl(){
 	a = RAM[hl];
 	--hl;
+	++program_counter;
+	clocks += 8;
 }
 
 inline void GB_CPU::ldd_hl_a(){
 	RAM[hl] = a;
 	--hl;
+	++program_counter;
+	clocks += 8;
 }
 
 inline void GB_CPU::ldi_a_hl(){
 	a = RAM[hl];
 	++hl;
+	++program_counter;
+	clocks += 8;
 }
 
 inline void GB_CPU::ldi_hl_a(){
 	RAM[hl] = a;
 	++hl;
+	++program_counter;
+	clocks += 8;
 }
 
-inline void GB_CPU::ldh_n_a(u16 n){
-	RAM[n] = a;
+inline void GB_CPU::ldh_n_a(){
+	++program_counter;
+	RAM[program_counter] = a;
+	++program_counter;
+	clocks += 12;
 }
-inline void GB_CPU::ldh_a_n(u16 n){
-	a = RAM[n];
+inline void GB_CPU::ldh_a_n(){
+	++program_counter;
+	a = RAM[program_counter];
+	++program_counter;
+	clocks += 12;
 }
 
 	//16 bit loads
 inline void GB_CPU::ld_n_nn(u16 * n){
-	// program_counter +=2;
 	*n = read_word();
-	// program_counter -=2;
+	program_counter += 3;
+	clocks += 12;
 }
 
 inline void GB_CPU::ld_sp_hl(){
 	stack_pointer = hl;
+	++program_counter;
+	clocks += 8;
 }
 
-inline void GB_CPU::ld_hl_sp_n(int n){
-	hl = stack_pointer + static_cast<u16>(RAM[program_counter +1]);
+inline void GB_CPU::ld_hl_sp_n(){
+	++program_counter;
+	int n = program_counter;
+	hl = RAM[stack_pointer + n];
+
+	//flag ops
+	z_flag = false;
+	n_flag = false;
+
+	// i THINK this is how this is supposed to be implemented...
+	if(hl & 0x04) h_flag = true;
+	else h_flag = false;
+	if(hl & 0x0f) c_flag = true;
+	else c_flag = false;
+
+	++program_counter;
+	clocks += 12;
 }
 
-inline void GB_CPU::ld_nn_sp(int nn){
+inline void GB_CPU::ld_nn_sp(){
 	RAM[read_word()] = stack_pointer; 
+	program_counter += 3;
+	clocks += 20;
 }
-//todo: fix
 inline void GB_CPU::push_nn(u16 nn){
 	u8 h,l;
 	l += nn;
@@ -2807,6 +2843,9 @@ inline void GB_CPU::push_nn(u16 nn){
 	--stack_pointer; 
 	RAM[stack_pointer] = h;
 	--stack_pointer; 
+
+	++program_counter;
+	clocks += 16;
 }
 //todo: fix
 inline void GB_CPU::pop_nn(u16 * nn){
@@ -2819,6 +2858,10 @@ inline void GB_CPU::pop_nn(u16 * nn){
 	*nn << 4;
 	*nn += l;
 
+	++program_counter;
+	clocks += 12;
+
+
 }
 	//8 bit ALU
 inline void GB_CPU::add_a_n(u8 n){
@@ -2829,8 +2872,40 @@ inline void GB_CPU::add_a_n(u8 n){
 	a += n;
 	if (a == 0) z_flag = true;
 	else n_flag = false;
+
+	++program_counter;
+	clocks += 4;
 }
 
+inline void GB_CPU::add_a_addr(){
+	u8 n = RAM[hl];
+	//check for carry in bit 3
+	if(a & 0x4 && n & 0x4) h_flag = true; 
+	//check for carry in bit 7
+	if(a & 0xf && n & 0xf) c_flag = true;
+	 
+	a += n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+
+	++program_counter;
+	clocks += 8;
+}
+
+inline void GB_CPU::add_a_imm(){
+	++program_counter;
+	u8 n = program_counter;
+	//check for carry in bit 3
+	if(a & 0x4 && n & 0x4) h_flag = true; 
+	//check for carry in bit 7
+	if(a & 0xf && n & 0xf) c_flag = true; 
+	a += n;
+	if (a == 0) z_flag = true;
+	else n_flag = false;
+
+	++program_counter;
+	clocks += 8;
+}
 //TODO: bug warning
 inline void GB_CPU::adc_a_n(u8 n){
 	//check for carry in bit 3
