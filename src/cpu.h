@@ -152,14 +152,30 @@ private:
 	inline void add_a_addr();
 	inline void add_a_imm();
 	inline void adc_a_n(u8 n);
+	inline void adc_a_addr();
+	inline void adc_a_imm();
 	inline void sub_a_n(u8 n);
+	inline void sub_a_addr();
+	inline void sub_a_imm();
 	inline void sbc_a_n(u8 n);
+	inline void sbc_a_addr();
+	inline void sbc_a_imm();
 	inline void and_n(u8 n);
+	inline void and_addr();
+	inline void and_imm();
 	inline void or_n(u8 n);
+	inline void or_addr();
+	inline void or_imm();
 	inline void xor_n(u8 n);
+	inline void xor_addr();
+	inline void xor_imm();
 	inline void cp_n(u8 n);
+	inline void cp_addr();
+	inline void cp_imm( );
 	inline void inc_n(u8 * n);
+	inline void inc_addr();
 	inline void dec_n(u8 * n);
+	inline void dec_addr();
 
 	//16 bit arithmetic
 	inline void add_hl_n(u16 n);
