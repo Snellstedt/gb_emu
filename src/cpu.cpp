@@ -360,12 +360,12 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 8;
 		} break;
 		case 0x34:{//inc (hl)
-			inc_n(RAM + hl);
+			inc_addr();
 			program_counter += 1;
 			clocks += 12;
 		} break;
 		case 0x35:{//dec (hl)
-			dec_n(RAM + hl);
+			dec_addr();
 			program_counter += 1;
 			clocks += 12;
 		} break;
@@ -1060,7 +1060,7 @@ void GB_CPU::execute_opcode(u8 op){
 			clocks += 4;
 		} break;
 		case 0xbe:{//cp (hl)
-			cp_n(RAM[hl]);
+			cp_addr();
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -1367,7 +1367,7 @@ void GB_CPU::execute_opcode(u8 op){
 		} break;
 		case 0xfe:{//cp d8
 			program_counter += 1;
-			cp_n(RAM[program_counter]);
+			cp_imm();
 			program_counter += 1;
 			clocks += 8;
 		} break;
@@ -1415,7 +1415,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0x06:{//rlc (hl)
-							rlc_n(RAM + hl);
+							rlc_addr();
 							program_counter += 1;
 							clocks += 16;
 						} break;
@@ -1455,7 +1455,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0x0e:{//rrc (hl)
-							rrc_n(RAM + hl);
+							rrc_addr();
 							program_counter += 1;
 							clocks += 16;
 						} break;
@@ -1495,7 +1495,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0x16:{//rl (hl) 
-							rl_n(RAM + hl);
+							rl_addr();
 							program_counter += 1;
 							clocks += 16;
 						} break;
@@ -1575,7 +1575,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0x26:{//sla (hla)
-							sla_n(RAM + hl);
+							sla_addr();
 							program_counter += 1;
 							clocks += 16;
 						} break;
@@ -1655,7 +1655,7 @@ void GB_CPU::execute_opcode(u8 op){
 							clocks += 8;
 						} break;
 						case 0x36:{//swap (hl)
-							swap_n(RAM + hl);
+							swap_addr();
 							program_counter += 1;
 							clocks += 16;
 						} break;
@@ -3140,6 +3140,8 @@ inline void GB_CPU::inc_n(u8 * n){
 	if(*n == 0) z_flag = true;
 	n_flag = false;
 	//c flag not affected
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::dec_n(u8 * n){
 	if(*n & 0x4) h_flag = true;
@@ -3147,9 +3149,37 @@ inline void GB_CPU::dec_n(u8 * n){
 	if(*n == 0) z_flag = true;
 	n_flag = true;
 	//c flag not affected
+	++program_counter;
+	clocks += 4;
 }
+
+inline void GB_CPU::inc_addr(){
+	u8 * n = RAM + hl;
+	if(*n & 0x4) h_flag = true;
+	++(*n);
+	if(*n == 0) z_flag = true;
+	n_flag = false;
+	//c flag not affected
+	++program_counter;
+	clocks += 12;
+}
+
+inline void GB_CPU::dec_addr(){
+	u8 * n = RAM + hl;
+	if(*n & 0x4) h_flag = true;
+	--(*n);
+	if(*n == 0) z_flag = true;
+	n_flag = true;
+	//c flag not affected
+	++program_counter;
+	clocks += 12;
+}
+
+
+
 	//16 bit arithmetic
 inline void GB_CPU::add_hl_n(u16  n){
+	//TODO: change to bit 11/15
 	//check for carry in bit 3
 	if(hl & 0x4 && n & 0x4) h_flag = true; 
 	//check for carry in bit 7
@@ -3158,23 +3188,42 @@ inline void GB_CPU::add_hl_n(u16  n){
 	//z flag not affected
 	n_flag = false;
 	//figure out h and c flags
+	++program_counter;
+	clocks += 8;
 }
 inline void GB_CPU::add_sp_n(u16 n){
+	++program_counter;
 	//check for carry in bit 3
 	if(stack_pointer & 0x4 && n & 0x4) h_flag = true; 
 	//check for carry in bit 7
 	if(stack_pointer & 0xf && n & 0xf) c_flag = true; 
-	stack_pointer += RAM[program_counter + 1];
+	stack_pointer += RAM[program_counter];
 	z_flag = false;
 	n_flag = false;
 	//figure out h and c flags
+	++program_counter;
+	clocks += 16;
 }
 inline void GB_CPU::inc_nn(u16 * nn){
 	++(*nn);
+	++program_counter;
+	clocks += 4;
 }
+// inline void GB_CPU::inc_addr(){
+// 	++(*RAM + hl);
+// 	++program_counter;
+// 	clocks += 12;
+// }
 inline void GB_CPU::dec_nn(u16 * nn){
 	--(*nn);
+	++program_counter;
+	clocks += 4;
 }
+// inline void GB_CPU::dec_addr(){
+// 	--(*RAM + hl);
+// 	++program_counter;
+// 	clocks += 12;
+// }
 	//misc
 inline void GB_CPU::swap_n(u8 * n){
 	u8 temp = *n;
@@ -3185,7 +3234,23 @@ inline void GB_CPU::swap_n(u8 * n){
 	n_flag = false;
 	h_flag = false;
 	c_flag = false;
+	++program_counter;
+	clocks += 8;
 }
+inline void GB_CPU::swap_addr(){
+	u8 * n = RAM + hl;
+	u8 temp = *n;
+	temp << 4;
+	*n >> 4;
+	*n += temp;
+	if(*n == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	c_flag = false;
+	++program_counter;
+	clocks += 8;
+}
+
 inline void GB_CPU::daa(){
 	u8 cf = 0;
 	u8 a_temp = a;
@@ -3209,6 +3274,8 @@ inline void GB_CPU::daa(){
 	if(a == 0) z_flag = true;
 	if(a ^ a_temp) h_flag = true;
 
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::cpl(){
 	a = ~a;
@@ -3216,35 +3283,54 @@ inline void GB_CPU::cpl(){
 	n_flag = true;
 	h_flag = true;
 	//c flag not affected
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::ccf(){
 	if(c_flag) c_flag = false;
 	else c_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::scf(){
 	c_flag = true;
 	n_flag = false;
 	h_flag = false;
 
+	++program_counter;
+	clocks += 4;
+
 }
 inline void GB_CPU::nop(){
 	//move along, nothing to see here...
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::halt(){
 	//TODO: wait for interrupt
+	ei_flag = true;
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::stop(){
 	//TODO: wait for button press
+	ei_flag = true;
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::di(){
 	//TODO: disable interrupts
 	ei_flag = false;
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::ei(){
 	//TODO: enable interrupts
 	ei_flag = true;
+	++program_counter;
+	clocks += 4;
 }
 	//rotates and shifts
 
@@ -3256,6 +3342,9 @@ inline void GB_CPU::rlca(){
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::rla(){
 	if(c_flag) ++a;
@@ -3264,6 +3353,8 @@ inline void GB_CPU::rla(){
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 4;
 }
 inline void GB_CPU::rrca(){
 	if(a & 0x1) c_flag = true;
@@ -3272,6 +3363,8 @@ inline void GB_CPU::rrca(){
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 4;
 
 }
 inline void GB_CPU::rra(){
@@ -3281,6 +3374,8 @@ inline void GB_CPU::rra(){
 	if (a == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 4;
 
 }
 inline void GB_CPU::rlc_n(u8 * n){
@@ -3290,7 +3385,19 @@ inline void GB_CPU::rlc_n(u8 * n){
 	if ((*n) == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
-	
+	++program_counter;
+	clocks += 8;	
+}
+inline void GB_CPU::rlc_addr(){
+	u8 * n = RAM + hl;
+	if(*n & 0xf) c_flag = true;
+	*n << 1;
+	if(c_flag) ++(*n);
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	++program_counter;
+	clocks += 16;	
 }
 inline void GB_CPU::rl_n(u8 * n){
 	if(c_flag) ++(*n);
@@ -3299,8 +3406,24 @@ inline void GB_CPU::rl_n(u8 * n){
 	if ((*n) == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 8;
 	
 }
+
+inline void GB_CPU::rl_addr(){
+	u8 * n = RAM + hl;
+	if(c_flag) ++(*n);
+	if(*n & 0xf) c_flag = true;
+	*n << 1;
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	++program_counter;
+	clocks += 16;
+	
+}
+
 inline void GB_CPU::rrc_n(u8 * n){
 	if(*n & 0x1) c_flag = true;
 	*n >> 1;
@@ -3308,6 +3431,21 @@ inline void GB_CPU::rrc_n(u8 * n){
 	if ((*n) == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 8;
+	
+}
+
+inline void GB_CPU::rrc_addr(){
+	u8 * n = RAM + hl;
+	if(*n & 0x1) c_flag = true;
+	*n >> 1;
+	if(c_flag) ++(*n);
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	++program_counter;
+	clocks += 16;
 	
 }
 inline void GB_CPU::rr_n(u8 * n){
@@ -3317,9 +3455,23 @@ inline void GB_CPU::rr_n(u8 * n){
 	if ((*n) == 0) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 8;
 	
 }
 
+inline void GB_CPU::rr_addr(){
+	u8 * n = RAM + hl;
+	if(c_flag) ++(*n);
+	if(*n & 0x1) c_flag = true;
+	*n >> 1;
+	if ((*n) == 0) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	++program_counter;
+	clocks += 16;
+	
+}
 inline void GB_CPU::sla_n(u8 * n){
 	if(*n & 0xf) c_flag = true;
 	else c_flag = false;
@@ -3327,7 +3479,22 @@ inline void GB_CPU::sla_n(u8 * n){
 	if(!(*n)) z_flag = true;
 	n_flag = false;
 	h_flag = false;
+	++program_counter;
+	clocks += 8;
 }
+
+inline void GB_CPU::sla_addr(){
+	u8 * n = RAM + hl;
+	if(*n & 0xf) c_flag = true;
+	else c_flag = false;
+	*n << 1;
+	if(!(*n)) z_flag = true;
+	n_flag = false;
+	h_flag = false;
+	++program_counter;
+	clocks += 16;
+}
+
 inline void GB_CPU::sra_n(u8 * n){
 	//test MSB
 	u8 temp = 0;

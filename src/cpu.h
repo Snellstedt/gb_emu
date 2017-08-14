@@ -185,6 +185,7 @@ private:
 
 	//misc
 	inline void swap_n(u8 * n);
+	inline void swap_addr();
 	inline void daa();
 	inline void cpl();
 	inline void ccf();
@@ -201,12 +202,19 @@ private:
 	inline void rrca();
 	inline void rra();
 	inline void rlc_n(u8 * n);
+	inline void rlc_addr();
 	inline void rl_n(u8 * n);
+	inline void rl_addr();
 	inline void rrc_n(u8 * n);
+	inline void rrc_addr();
 	inline void rr_n(u8 * n);
+	inline void rr_addr();
 	inline void sla_n(u8 * n);
+	inline void sla_addr();
 	inline void sra_n(u8 * n);
+	inline void sra_addr();
 	inline void srl_n(u8 * n);
+	inline void srl_addr();
 
 	//bit opcodes
 	inline void bit_b_r(u8 b, u8 * n);
