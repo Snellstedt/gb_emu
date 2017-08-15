@@ -260,7 +260,7 @@ void GB_CPU::execute_opcode(u8 op){
 			dec_n(&a);
 		} break;
 		case 0x3e:{//ld a,d8
-			ld_a_n(RAM + program_counter + 1);
+			ld_a_n_imm();
 		} break;
 		case 0x3f:{//ccf
 			ccf();
@@ -954,8 +954,7 @@ void GB_CPU::execute_opcode(u8 op){
 			 
 		} break;
 		case 0xea:{//ld (a16), a
-			u16 temp = read_word();
-			ld_n_a(&temp);
+			ld_n_a_addr_nn();
 			 
 			 
 		} break;
@@ -2396,6 +2395,13 @@ inline void GB_CPU::ld_a_n(u8 * n){
 	clocks += 4;
 }
 
+inline void GB_CPU::ld_a_n_imm(){
+	++program_counter;
+	a = RAM[program_counter];
+	++program_counter;
+	clocks += 8;
+}
+
 inline void GB_CPU::ld_a_n_addr(u8 * n){
 	a = *n;
 	++program_counter;
@@ -3247,14 +3253,14 @@ inline void GB_CPU::bit_b_r(u8 b, u8 * n){
 
 inline void GB_CPU::set_b_r(u8 b, u8 * n){
 	switch(b){
-		case 0:{if(!(*n & 0x01)) *n += 0x01; ++program_counter; clocks += 8;}break;
-		case 1:{if(!(*n & 0x02)) *n += 0x02; ++program_counter; clocks += 8;}break;
-		case 2:{if(!(*n & 0x04)) *n += 0x04; ++program_counter; clocks += 8;}break;
-		case 3:{if(!(*n & 0x08)) *n += 0x08; ++program_counter; clocks += 8;}break;
-		case 4:{if(!(*n & 0x10)) *n += 0x10; ++program_counter; clocks += 8;}break;
-		case 5:{if(!(*n & 0x20)) *n += 0x20; ++program_counter; clocks += 8;}break;
-		case 6:{if(!(*n & 0x40)) *n += 0x40; ++program_counter; clocks += 8;}break;
-		case 7:{if(!(*n & 0x80)) *n += 0x80; ++program_counter; clocks += 8;}break;
+		case 0:{if(!(*n & 0x01)){ *n += 0x01;} ++program_counter; clocks += 8;}break;
+		case 1:{if(!(*n & 0x02)){ *n += 0x02;} ++program_counter; clocks += 8;}break;
+		case 2:{if(!(*n & 0x04)){ *n += 0x04;} ++program_counter; clocks += 8;}break;
+		case 3:{if(!(*n & 0x08)){ *n += 0x08;} ++program_counter; clocks += 8;}break;
+		case 4:{if(!(*n & 0x10)){ *n += 0x10;} ++program_counter; clocks += 8;}break;
+		case 5:{if(!(*n & 0x20)){ *n += 0x20;} ++program_counter; clocks += 8;}break;
+		case 6:{if(!(*n & 0x40)){ *n += 0x40;} ++program_counter; clocks += 8;}break;
+		case 7:{if(!(*n & 0x80)){ *n += 0x80;} ++program_counter; clocks += 8;}break;
 	}
 }
 inline void GB_CPU::res_b_r(u8 b, u8 * n){
@@ -3297,16 +3303,19 @@ inline void GB_CPU::jr_cc_n(){
 	//TODO
 	int jump = static_cast<u8>(RAM[program_counter + 1]);
 	switch(RAM[program_counter]){
-		case 0x20:{if(!z_flag) program_counter += jump ; clocks += 8;}break;
-		case 0x28:{if(z_flag) program_counter += jump ; clocks += 8;}break;
-		case 0x30:{if(!c_flag) program_counter += jump ; clocks += 8;}break;
-		case 0x38:{if(c_flag) program_counter += jump ; clocks += 8;}break;
+		// case 0x20:{if(!z_flag) program_counter += jump ; clocks += 8;}break;
+		case 0x20:{!z_flag ? program_counter += jump : ++++program_counter ; clocks += 8;}break;
+		case 0x28:{z_flag? program_counter += jump  : ++++program_counter ; clocks += 8;}break;
+		case 0x30:{!c_flag ? program_counter += jump  : ++++program_counter ; clocks += 8;}break;
+		case 0x38:{c_flag ? program_counter += jump  : ++++program_counter ; clocks += 8;}break;
 	}
 }
 
 	//calls
 inline void GB_CPU::call_nn(){
+	//push address of next instruction onto stack
 	push_nn(program_counter + 3);
+	//jummp to address nn
 	program_counter = read_word();
 	clocks += 12;
 }

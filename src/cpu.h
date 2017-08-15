@@ -126,6 +126,7 @@ private:
 	inline void ld_r1_r2_hl_n(u8 * r1, u8 * r2);
 	inline void ld_a_n(u8 * n);
 	inline void ld_a_n_addr(u8 * n);
+	inline void ld_a_n_imm();
 	inline void ld_a_n_addr_nn();
 	inline void ld_n_a(u16 * n);
 	inline void ld_n_a_addr(u16 n);
