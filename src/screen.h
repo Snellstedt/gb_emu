@@ -64,6 +64,8 @@ public:
 		//Fill the surface white
 		SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
 		
+
+		//
 		//Apply the image
         SDL_BlitSurface( gHelloWorld, NULL, screenSurface, NULL );		
 		//Update the surface
@@ -73,7 +75,12 @@ public:
 
 	}
 
-	//custonm destructor
+	GB_render_frame(){
+		//start screen at 
+
+	}
+
+	//custonm destructorreal
 	~GB_Screen(){
 	    //Deallocate surface
 	    SDL_FreeSurface( gHelloWorld );

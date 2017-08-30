@@ -35,36 +35,40 @@ public:
         }
 
     // get length of file:
-    	file.seekg (0, file.end);
-    	int length = file.tellg();
-    	file.seekg (0, file.beg);
-        //in the future, load 1st half into RAM and 2nd half into bank, for now just dump the whole damn thing
-        file.read(reinterpret_cast<char*>(RAM), length);
-
-        file.close();
-        //debug: should print out title of game
-        for(int i = 0x0; i < 0xF; ++i){
-
-       		 std::cout << RAM[0x134 + i];
-        }
-        std::cout << '\n';
-
-
-
+	file.seekg (0, file.end);
+	int length = file.tellg();
+	file.seekg (0, file.beg);
+	//in the future, load 1st half into RAM and 2nd half into bank, for now just dump the whole damn thing
+	file.read(reinterpret_cast<char*>(RAM), length);
+	
+	file.close();
+	//debug: should print out title of game
+	for(int i = 0x0; i < 0xF; ++i){
+		
+		std::cout << RAM[0x134 + i];
 	}
+	std::cout << '\n';
+	
+	
+	
+}
 
-	void reset();
+void reset();
 
 
-	//do this once per cycle
-	void tick(){
-		//delay to keep clock in sync
-
-		//decode
-		if(debug){
-
-			std::cout << std::hex <<
-				" ( " << static_cast<u16>(RAM[program_counter]) << ' ' << static_cast<u16>(RAM[program_counter + 1]) << 
+//do this once per cycle
+void tick(){
+	//check interrupts
+	char a;
+	//fetch
+	op = RAM[program_counter];
+	
+	execute_opcode(op);
+	//execute
+	if(debug){
+		
+		std::cout << std::hex <<
+		" ( " << static_cast<u16>(RAM[program_counter]) << ' ' << static_cast<u16>(RAM[program_counter + 1]) << 
 				' ' << static_cast<u16>(RAM[program_counter + 2]) << " ) \n" <<
 			
 				 "Current opcode: " << static_cast<u16>(op) << ' ' << 
@@ -96,13 +100,6 @@ public:
 
 			std::cin.get();
 		}
-		//check interrupts
-		char a;
-		//fetch
-		op = RAM[program_counter];
-
-		execute_opcode(op);
-		//execute
 		// program_counter += 1;
 	}
 

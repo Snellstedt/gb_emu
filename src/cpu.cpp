@@ -3301,7 +3301,8 @@ inline void GB_CPU::jr_n(){
 }
 inline void GB_CPU::jr_cc_n(){
 	//TODO
-	int jump = static_cast<u8>(RAM[program_counter + 1]);
+	signed int jump = static_cast<u8>(RAM[program_counter + 1]);
+	// std::cout << "Jump value is: " << '\n';
 	switch(RAM[program_counter]){
 		// case 0x20:{if(!z_flag) program_counter += jump ; clocks += 8;}break;
 		case 0x20:{!z_flag ? program_counter += jump : ++++program_counter ; clocks += 8;}break;
