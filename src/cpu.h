@@ -22,8 +22,6 @@ public:
 		memset(RAM, 0, 0xFFFF);
 
 		//set registers, stack pointer and program counter to zero
-		a = f = c = b = e = d = l = h = program_counter = stack_pointer = 0;
-		z_flag = n_flag = h_flag = c_flag = false;
 
 		//open ROM
         std::ifstream file;
@@ -240,7 +238,22 @@ private:
 
 
 
+	//flag ops
+	inline void set_c_flag();
+	inline void set_h_flag();
+	inline void set_s_flag();
+	inline void set_z_flag();
+	
+	inline void reset_c_flag();
+	inline void reset_h_flag();
+	inline void reset_s_flag();
+	inline void reset_z_flag();
 
+	bool test_c_flag();
+	bool test_h_flag();
+	bool test_s_flag();
+	bool test_z_flag();
+	
 
 	//gets 2 byte word in little endian
 	unsigned short read_word();
@@ -273,6 +286,8 @@ General Memory Map -- taken from pandocs
   FF80-FFFE   High RAM (HRAM)
   FFFF        Interrupt Enable Register
 	*/
+
+	//RAM is a terrible naming choice for the memory map, but oh well
 	unsigned char RAM[0xFFFF];
 	u8 op;
 
@@ -283,53 +298,59 @@ General Memory Map -- taken from pandocs
 	bool n_flag;//subtract
 	bool h_flag;//half carry
 	bool c_flag;//carry
+
 	bool ei_flag;//enable interrupts
+	bool halt_flag;
+	bool stop_flag;
 
 	unsigned short stack_pointer;
 	unsigned short program_counter;
 	unsigned long clocks;
 
 	//registers - same method as Cinoop, credit given to cturt
-	struct {
-		union {
-			struct {
-				unsigned char f;
-				unsigned char a;
-			};
-			unsigned short af;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				unsigned char c;
-				unsigned char b;
-			};
-			unsigned short bc;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				unsigned char e;
-				unsigned char d;
-			};
-			unsigned short de;
-		};
-	};
-	
-	struct {
-		union {
-			struct {
-				unsigned char l;
-				unsigned char h;
-			};
-			unsigned short hl;
-		};
-	};
-	
+	struct regs{
 
-
-};//end class
+		struct {
+			union {
+				struct {
+					unsigned char f;
+					unsigned char a;
+				};
+				unsigned short af;
+			};
+		};
+		
+		struct {
+			union {
+				struct {
+					unsigned char c;
+					unsigned char b;
+				};
+				unsigned short bc;
+			};
+		};
+		
+		struct {
+			union {
+				struct {
+					unsigned char e;
+					unsigned char d;
+				};
+				unsigned short de;
+			};
+		};
+		
+		struct {
+			union {
+				struct {
+					unsigned char l;
+					unsigned char h;
+				};
+				unsigned short hl;
+			};
+		};
+	};
+		
+		
+		
+	};//end class

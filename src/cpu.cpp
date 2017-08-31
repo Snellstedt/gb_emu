@@ -10,7 +10,7 @@ void GB_CPU::reset(){
 		de = 0x00D8;
 		hl = 0x014D;
 		stack_pointer = 0xFFFE;
-		program_counter = 0x100;
+		program_counter = 0x0100;
 
 		RAM[0xFF05] = 0x00; //TIMA
 		RAM[0xFF06] = 0x00; //TMA
@@ -32,9 +32,7 @@ void GB_CPU::reset(){
 		RAM[0xFF23] = 0xBF; //NR30
 		RAM[0xFF24] = 0x77; //NR50
 		RAM[0xFF25] = 0xF3; //NR51
-
-		RAM[0xFF26] = 0x80; //NR43// fix this
-
+		RAM[0xFF26] = 0xf1; //NR52
 		RAM[0xFF40] = 0x91; //LCDC
 		RAM[0xFF42] = 0x00; //SCY
 		RAM[0xFF43] = 0x00; //SCX
@@ -3352,3 +3350,17 @@ inline void GB_CPU::reti(){
 	ei_flag = true;
 	ret();
 }
+inline void set_c_flag(){}
+inline void set_h_flag(){}
+inline void set_s_flag(){}
+inline void set_z_flag(){}
+
+inline void reset_c_flag(){}
+inline void reset_h_flag(){}
+inline void reset_s_flag(){}
+inline void reset_z_flag(){}
+
+bool test_c_flag(){return false;}
+bool test_h_flag(){return false;}
+bool test_s_flag(){return false;}
+bool test_z_flag(){return false;}

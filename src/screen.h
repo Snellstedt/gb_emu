@@ -75,8 +75,11 @@ public:
 
 	}
 
-	GB_render_frame(){
+	void GB_render_frame(){
 		//start screen at 
+
+		//for each line
+		
 
 	}
 
